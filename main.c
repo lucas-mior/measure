@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
         execvp(argv[1], &argv[1]);
 
         error("Error executing:\n\n"
-              RED"%s\n"RESET
+              RED("%s\n")
               "%s.\n", command, strerror(errno));
         exit(EXIT_FAILURE);
     default:

@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
         double total_seconds = (double)seconds + (double)nanos / 1.0e9;
 
         printf("\nTiming for command:\n\n"
-               BLUE("%s\n")
-               "    "BLUE("%f")"s\n", command, total_seconds);
+               BLUE("%s\n\n")
+               BLUE("%f")"s\n\n", command, total_seconds);
     }
     exit(EXIT_SUCCESS);
 }

@@ -32,9 +32,11 @@
 #define RED    "\x1b[31m"
 #define GREEN  "\x1b[32m"
 #define YELLOW "\x1b[33m"
-#define BLUE   "\x1b[1;34m"
+/* #define BLUE   "\x1b[1;34m" */
 #define RESET  "\x1b[0m"
 #endif
+
+#define BLUE(S) "\x1b[1;34m" S "\x1b[0m"
 
 #if defined(__INCLUDE_LEVEL__) && (__INCLUDE_LEVEL__ == 0)
 #define TESTING_generic 1

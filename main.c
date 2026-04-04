@@ -24,7 +24,9 @@ int main(int argc, char **argv) {
     case 0:
         execvp(argv[1], &argv[1]);
 
-        error("Error executing\n%s\n%s.\n", command, strerror(errno));
+        error("Error executing:\n\n"
+              RED"%s\n"RESET
+              "%s.\n", command, strerror(errno));
         exit(EXIT_FAILURE);
     default:
         if (wait(NULL) < 0) {
@@ -40,7 +42,9 @@ int main(int argc, char **argv) {
         llong nanos = t1.tv_nsec - t0.tv_nsec;
         double total_seconds = (double)seconds + (double)nanos / 1.0e9;
 
-        printf("\nTiming for command\n%s\n    %fs\n", command, total_seconds);
+        printf("\nTiming for command:\n\n"
+               BLUE"%s\n"
+               RESET"    "BLUE"%f"RESET"s\n", command, total_seconds);
     }
     exit(EXIT_SUCCESS);
 }

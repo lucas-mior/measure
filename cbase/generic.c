@@ -29,11 +29,10 @@
 #endif
 
 #if !defined(RED) || !defined(GREEN) || !defined(YELLOW) || !defined(RESET)
-#define RESET  "\x1b[0m"
-#define RED(S)    "\x1b[31m"   S RESET
-#define GREEN(S)  "\x1b[32m"   S RESET
-#define YELLOW(S) "\x1b[33m"   S RESET
-#define BLUE(S)   "\x1b[1;34m" S RESET
+#define RED   "\x1b[31m"
+#define GREEN "\x1b[32m"
+#define YELLOW "\x1b[33m"
+#define RESET "\x1b[0m"
 #endif
 
 #if defined(__INCLUDE_LEVEL__) && (__INCLUDE_LEVEL__ == 0)

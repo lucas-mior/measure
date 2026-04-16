@@ -32,7 +32,7 @@ program=$(basename "$(readlink -f "$dir")")
 script=$(basename "$0")
 
 . ./targets
-target="${1:-fast_feedback}"
+target="${1:-build}"
 
 if ! grep -q "$target" ./targets; then
     echo "usage: $script <targets>"

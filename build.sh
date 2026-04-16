@@ -68,8 +68,6 @@ CFLAGS="$CFLAGS -Wno-deprecated-declarations"
 CFLAGS="$CFLAGS -Wno-unknown-pragmas"
 CFLAGS="$CFLAGS -Wno-format-security"
 CFLAGS="$CFLAGS -Wno-unused-function"
-CFLAGS="$CFLAGS -Wno-comma"
-CFLAGS="$CFLAGS -Wno-undef"
 
 LDFLAGS="$LDFLAGS -lm"
 OS=$(uname -a)

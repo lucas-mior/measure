@@ -31,8 +31,6 @@ cd "$dir" || exit
 program=$(basename "$(readlink -f "$dir")")
 script=$(basename "$0")
 
-LANGS="pt_BR"
-
 . ./targets
 target="${1:-fast_feedback}"
 

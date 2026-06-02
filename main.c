@@ -27,9 +27,13 @@ int main(int argc, char **argv) {
         error("Error executing:\n\n"
               RED("%s\n")
               "%s.\n", command, strerror(errno));
+        fflush(stderr);
         exit(EXIT_FAILURE);
     default:
-        if (wait(NULL) < 0) {
+        while (wait(NULL) < 0) {
+            if (errno == EINTR) {
+                continue;
+            }
             error("Error waiting for child: %s.\n", strerror(errno));
             exit(EXIT_FAILURE);
         }
@@ -45,6 +49,7 @@ int main(int argc, char **argv) {
         printf("\nTiming for command:\n\n"
                BLUE("%s\n\n")
                BLUE("%f")"s\n\n", command, total_seconds);
+        fflush(stdout);
     }
     exit(EXIT_SUCCESS);
 }

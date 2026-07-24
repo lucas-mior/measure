@@ -1,7 +1,9 @@
 #include <time.h>
 #include <sys/wait.h>
 
-#include "util.c"
+#define CBASE_IMPLEMENT
+#include "cbase.h"
+
 
 int main(int argc, char **argv) {
     char command[BUFSIZ];

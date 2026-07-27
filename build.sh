@@ -67,7 +67,6 @@ CFLAGS="$CFLAGS -Wno-cast-qual"
 CFLAGS="$CFLAGS -Wno-deprecated-declarations"
 CFLAGS="$CFLAGS -Wno-unknown-pragmas"
 CFLAGS="$CFLAGS -Wno-format-security"
-CFLAGS="$CFLAGS -Wno-unused-function"
 
 LDFLAGS="$LDFLAGS -lm"
 OS=$(uname -a)

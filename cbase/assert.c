@@ -816,6 +816,10 @@ assert_functions_sink(void) {
 
     (void)a_bool_equal;
     (void)a_bool_not_equal;
+    (void)a_bool_less_equal;
+    (void)a_bool_less;
+    (void)a_bool_more_equal;
+    (void)a_bool_more;
     return;
 }
 #endif

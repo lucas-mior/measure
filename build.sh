@@ -23,8 +23,7 @@ alias trace_off='{ set +x; } 2>/dev/null'
 # export LC_ALL=C
 
 dir=$(dirname "$(readlink -f "$0")")
-cbase="cbase"
-CPPFLAGS="$CPPFLAGS -I$dir/$cbase"
+CPPFLAGS="$CPPFLAGS -I$dir/cbase"
 CPPFLAGS="$CPPFLAGS -I."
 
 cd "$dir" || exit
@@ -110,7 +109,7 @@ OS=$(uname -a)
 
 requested_cc=${CC:-}
 case "$target" in
-"debug"|"test"|"fast_feedback")
+debug|test|fast_feedback)
     CC="${requested_cc:-tcc}"
     ;;
 *)
@@ -151,25 +150,25 @@ compile_with_chibicc () {
 }
 
 case "$target" in
-"debug")
+debug)
     CFLAGS="$CFLAGS -g3 -fsanitize=undefined"
     CPPFLAGS="$CPPFLAGS $GNUSOURCE -DDEBUGGING=1"
     exe="bin/${program}_debug"
     ;;
-"test")
+test)
     CFLAGS="$CFLAGS -g $GNUSOURCE -DDEBUGGING=1 -fsanitize=undefined"
     ;;
-"check")
+check)
     CC=gcc
     CFLAGS="$CFLAGS $GNUSOURCE -DDEBUGGING=1 -fanalyzer"
     ;;
 "build"|"run")
     CFLAGS="$CFLAGS $GNUSOURCE -O2 -flto -march=native -ftree-vectorize"
     ;;
-"release")
+release)
     CFLAGS="$CFLAGS $GNUSOURCE -DRELEASING=1 -O2 -flto -march=native -ftree-vectorize"
     ;;
-"fast_feedback")
+fast_feedback)
     CFLAGS="$CFLAGS $GNUSOURCE -Werror"
     ;;
 *)
@@ -228,12 +227,12 @@ if [ "$CC" = "clang" ]; then
 fi
 
 case "$target" in
-"fast_feedback")
+fast_feedback)
     trace_on
     $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
     trace_off
     ;;
-"build"|"debug"|"run"|"release")
+build|debug|run|release)
     trace_on
 
     ctags --kinds-C=+l+d cbase/*.c *.h src/*.c  2> /dev/null || true
@@ -254,7 +253,7 @@ case "$target" in
 
     trace_off
     ;;
-"install")
+install)
     trace_on
     $0 release
     install -Dm755 bin/${program}   ${DESTDIR}${PREFIX}/bin/${program}
@@ -272,7 +271,7 @@ case "$target" in
     trace_off
     exit
     ;;
-"test")
+test)
     find . -iname "*.c" | sort | while read -r src; do
         trace_off
         name=$(basename "$src")
@@ -327,7 +326,7 @@ case "$target" in
     done
     exit
     ;;
-"uninstall")
+uninstall)
     rm -vf  "${DESTDIR}${PREFIX}/bin/${program:?}"
     rm -vf  "${DESTDIR}${PREFIX}/man/man1/${program:?}.1"
     rm -rvf "$DESTDIR/etc/${program:?}/"
@@ -337,7 +336,7 @@ case "$target" in
 esac
 
 case "$target" in
-"check")
+check)
     CC=gcc CFLAGS="-fanalyzer" ./build.sh
 
     CFLAGS="--analyze -Xanalyzer -analyzer-output=text"

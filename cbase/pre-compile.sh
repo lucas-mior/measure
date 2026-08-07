@@ -85,7 +85,7 @@ object_stale () {
 
 compile_object () {
     case "$compiler" in
-    chibicc)
+    chibicc|cproc)
         with_toy_cc "$compiler" "$@" \
             -DCBASE_IMPLEMENT=1 -x c -c "$header" -o "$object"
         ;;

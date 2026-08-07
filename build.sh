@@ -115,7 +115,15 @@ CFLAGS="$CFLAGS -Wno-format-security"
 LDFLAGS="$LDFLAGS -lm"
 OS=$(uname -a)
 
-CC="${CC:-cc}"
+requested_cc=${CC:-}
+case "$target" in
+"debug"|"test"|"fast_feedback")
+    CC="${requested_cc:-tcc}"
+    ;;
+*)
+    CC="${requested_cc:-cc}"
+    ;;
+esac
 if echo "$OS" | grep -q "Linux"; then
     if echo "$OS" | grep -q "GNU"; then
         GNUSOURCE="-D_GNU_SOURCE"
@@ -182,7 +190,6 @@ case "$target" in
     CFLAGS="$CFLAGS $GNUSOURCE -DRELEASING=1 -O2 -flto -march=native -ftree-vectorize"
     ;;
 "fast_feedback")
-    CC=clang
     CFLAGS="$CFLAGS $GNUSOURCE -Werror"
     ;;
 *)

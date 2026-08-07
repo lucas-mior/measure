@@ -169,7 +169,7 @@ check)
     CC=gcc
     CFLAGS="$CFLAGS $GNUSOURCE -DDEBUGGING=1 -fanalyzer"
     ;;
-"build"|"run")
+build|run)
     CFLAGS="$CFLAGS $GNUSOURCE -O2 -flto -march=native -ftree-vectorize"
     ;;
 release)
@@ -190,7 +190,7 @@ if [ "$target" = "cross" ]; then
     CFLAGS=$(option_remove "$CFLAGS" "-D_GNU_SOURCE")
 
     case $cross in
-    "x86_64-macos"|"aarch64-macos")
+    x86_64-macos|aarch64-macos)
         CFLAGS="$CFLAGS -fno-lto"
         LDFLAGS="$LDFLAGS -lpthread"
         ;;

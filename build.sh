@@ -44,9 +44,6 @@ test
 check
 release
 run
-profile
-perf
-test_all
 cross x86_64-linux
 cross aarch64-linux
 cross x86_64-macos
@@ -159,11 +156,6 @@ case "$target" in
     CPPFLAGS="$CPPFLAGS $GNUSOURCE -DDEBUGGING=1"
     exe="bin/${program}_debug"
     ;;
-"perf")
-    CFLAGS="$CFLAGS -g -O2 -flto"
-    CPPFLAGS="$CPPFLAGS $GNUSOURCE"
-    exe="bin/${program}_perf"
-    ;;
 "test")
     CFLAGS="$CFLAGS -g $GNUSOURCE -DDEBUGGING=1 -fsanitize=undefined"
     ;;
@@ -241,7 +233,7 @@ case "$target" in
     $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
     trace_off
     ;;
-"build"|"debug"|"run"|"release"|"perf"|"profile")
+"build"|"debug"|"run"|"release")
     trace_on
 
     ctags --kinds-C=+l+d cbase/*.c *.h src/*.c  2> /dev/null || true
@@ -355,25 +347,4 @@ case "$target" in
     CC=clang CFLAGS="$CFLAGS" ./build.sh
     exit
     ;;
-"perf")
-    trace_on
-    perf record -F 999 -g --call-graph dwarf -o bin/perf.data "$exe"
-    perf report -n -g --input bin/perf.data
-    trace_off
-    exit
-    ;;
 esac
-
-trace_off
-if [ "$target" = "test_all" ]; then
-    printf '%s\n' "$targets" | while IFS= read -r target; do
-        echo "$target" | grep -Eq "^(# |$)" && continue
-        if echo "$target" | grep "cross"; then
-            $0 $target
-            continue
-        fi
-        for compiler in gcc tcc clang "zig cc" ; do
-            CC=$compiler $0 $target || exit
-        done
-    done
-fi

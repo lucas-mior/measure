@@ -119,6 +119,10 @@ fast_feedback)
     ;;
 esac
 
+if ! command -v "$CC" > /dev/null 2>&1; then
+    CC=cc
+fi
+
 if echo "$OS" | grep -q "Linux"; then
     if echo "$OS" | grep -q "GNU"; then
         GNUSOURCE="-D_GNU_SOURCE"

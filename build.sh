@@ -45,7 +45,6 @@ check
 release
 run
 profile
-assembly
 perf
 test_all
 cross x86_64-linux
@@ -278,12 +277,6 @@ case "$target" in
             "$program.desktop" \
             "$DESTDIR/usr/share/applications/$program.desktop"
     fi
-    trace_off
-    exit
-    ;;
-"assembly")
-    trace_on
-    $CC $CPPFLAGS $CFLAGS -S $LDFLAGS -o ${program}_$CC.S "$main"
     trace_off
     exit
     ;;

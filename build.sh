@@ -2,27 +2,15 @@
 
 # shellcheck disable=SC2086
 
-set -e
-
-error () {
-    >&2 printf "$@"
-    return
-}
-
-if [ -n "$BASH_VERSION" ]; then
-    # shellcheck disable=SC3044
-    shopt -s expand_aliases
-fi
+dir=$(dirname "$(readlink -f "$0")")
+# shellcheck source=/dev/null
+. "$dir/cbase/common.sh"
 
 # gtk might not work correctly if you have stuff here
 export XDG_DATA_DIRS=""
 
-alias trace_on='set -x'
-alias trace_off='{ set +x; } 2>/dev/null'
-
 # export LC_ALL=C
 
-dir=$(dirname "$(readlink -f "$0")")
 CPPFLAGS="$CPPFLAGS -I$dir/cbase"
 CPPFLAGS="$CPPFLAGS -I."
 

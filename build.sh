@@ -47,9 +47,6 @@ run
 profile
 assembly
 perf
-valgrind
-callgrind
-cachegrind
 test_all
 cross x86_64-linux
 cross aarch64-linux
@@ -168,14 +165,6 @@ case "$target" in
     CPPFLAGS="$CPPFLAGS $GNUSOURCE"
     exe="bin/${program}_perf"
     ;;
-"valgrind")
-    CFLAGS="$CFLAGS -g3 -O0 -ftree-vectorize"
-    CPPFLAGS="$CPPFLAGS $GNUSOURCE -DDEBUGGING=1"
-    ;;
-"callgrind")
-    CFLAGS="$CFLAGS -g3 -O2 -ftree-vectorize"
-    CPPFLAGS="$CPPFLAGS $GNUSOURCE"
-    ;;
 "test")
     CFLAGS="$CFLAGS -g $GNUSOURCE -DDEBUGGING=1 -fsanitize=undefined"
     ;;
@@ -253,7 +242,7 @@ case "$target" in
     $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
     trace_off
     ;;
-"build"|"debug"|"run"|"release"|"valgrind"|"callgrind"|"perf"|"profile")
+"build"|"debug"|"run"|"release"|"perf"|"profile")
     trace_on
 
     ctags --kinds-C=+l+d cbase/*.c *.h src/*.c  2> /dev/null || true
@@ -363,39 +352,6 @@ case "$target" in
 esac
 
 case "$target" in
-"valgrind")
-    vg_flags="$vg_flags --error-exitcode=1"
-    vg_flags="$vg_flags --leak-check=no"
-    # vg_flags="$vg_flags --show-leak-kinds=definite"
-    # vg_flags="$vg_flags --errors-for-leak-kinds=definite"
-    vg_flags="$vg_flags --track-origins=yes"
-    # vg_flags="$vg_flags --suppressions=valgrind.supress"
-    # vg_flags="$vg_flags --gen-suppressions=yes"
-    vg_flags="$vg_flags --main-stacksize=18388608"
-
-    trace_on
-    G_DEBUG=gc-friendly G_SLICE=always-malloc \
-        valgrind $vg_flags -s --tool=memcheck bin/$program 2>&1 \
-        | tee "valgrind_output_$(date +%s).txt"
-    trace_off
-    exit
-    ;;
-"callgrind")
-    out="callgrind_$(date +%s).callgrind"
-    trace_on
-    valgrind --tool=callgrind --callgrind-out-file="$out" bin/$program
-    kcachegrind "$out"
-    trace_off
-    exit
-    ;;
-"cachegrind")
-    out="cachegrind_$(date +%s).callgrind"
-    trace_on
-    valgrind --tool=cachegrind --cachegrind-out-file="$out" bin/$program
-    kcachegrind "$out"
-    trace_off
-    exit
-    ;;
 "check")
     CC=gcc CFLAGS="-fanalyzer" ./build.sh
 

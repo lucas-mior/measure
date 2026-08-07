@@ -2,6 +2,8 @@
 bin/
 compile_commands.json
 tags
-temp_delete_me
+*temp_delete_me*
 *.cmd
 *.o
+bin/
+*.tar.gz

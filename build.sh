@@ -243,10 +243,6 @@ build|debug|run|release)
         $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
     fi
 
-    if [ $target = "debug" ]; then
-        # G_DEBUG=fatal_warnings \
-            gdb $exe -ex run 2>&1 | tee "gdb_output_$(date +%s).txt"
-    fi
     if [ $target = "run" ]; then
         $exe $2
     fi

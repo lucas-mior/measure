@@ -59,30 +59,6 @@ main="main.c"
 exe="bin/$program"
 mkdir -p "$(dirname "$exe")"
 
-CPPFLAGS="$CPPFLAGS -I. -I$dir/cbase"
-CPPFLAGS="$CPPFLAGS -D_DEFAULT_SOURCE"
-CPPFLAGS="$CPPFLAGS -DGETTEXT_PACKAGE=$program"
-CPPFLAGS="$CPPFLAGS -DLOCALEDIR=$PREFIX/share/locale"
-
-CFLAGS="$CFLAGS -std=c11"
-CFLAGS="$CFLAGS -Wfatal-errors"
-CFLAGS="$CFLAGS -Wall -Wextra"
-CFLAGS="$CFLAGS -Werror=all -Werror=extra"
-# CFLAGS="$CFLAGS -Werror"  # Only uncomment occasionally, keep this line
-CFLAGS="$CFLAGS -Wno-cast-qual"
-CFLAGS="$CFLAGS -Wno-constant-logical-operand"
-CFLAGS="$CFLAGS -Wno-deprecated-declarations"
-CFLAGS="$CFLAGS -Wno-float-equal"
-CFLAGS="$CFLAGS -Wno-format-pedantic"
-CFLAGS="$CFLAGS -Wno-format-security"
-CFLAGS="$CFLAGS -Wno-gnu-union-cast"
-CFLAGS="$CFLAGS -Wno-unknown-pragmas"
-CFLAGS="$CFLAGS -Wno-unknown-warning-option"
-CFLAGS="$CFLAGS -Wno-unused-macros"
-
-LDFLAGS="$LDFLAGS -lm"
-OS=$(uname -a)
-
 case "$target" in
 debug|test)
     CC="${CC:-tcc}"
@@ -98,6 +74,57 @@ esac
 if ! command -v "$CC" > /dev/null 2>&1; then
     CC=cc
 fi
+
+CPPFLAGS="$CPPFLAGS -I. -I$dir/cbase"
+CPPFLAGS="$CPPFLAGS -D_DEFAULT_SOURCE"
+CPPFLAGS="$CPPFLAGS -DGETTEXT_PACKAGE=$program"
+CPPFLAGS="$CPPFLAGS -DLOCALEDIR=$PREFIX/share/locale"
+
+CFLAGS="$CFLAGS -std=c11"
+CFLAGS="$CFLAGS -Wfatal-errors"
+CFLAGS="$CFLAGS -Wextra -Wall"
+CFLAGS="$CFLAGS -Werror=all -Werror=extra"
+# CFLAGS="$CFLAGS -Werror"  # Only uncomment occasionally, keep this line
+CFLAGS="$CFLAGS -Wno-cast-qual"
+CFLAGS="$CFLAGS -Wno-constant-logical-operand"
+CFLAGS="$CFLAGS -Wno-deprecated-declarations"
+CFLAGS="$CFLAGS -Wno-float-equal"
+CFLAGS="$CFLAGS -Wno-format-pedantic"
+CFLAGS="$CFLAGS -Wno-format-security"
+CFLAGS="$CFLAGS -Wno-gnu-union-cast"
+CFLAGS="$CFLAGS -Wno-unknown-pragmas"
+CFLAGS="$CFLAGS -Wno-unknown-warning-option"
+CFLAGS="$CFLAGS -Wno-unused-macros"
+
+if [ "$CC" = "clang" ]; then
+    CFLAGS="$CFLAGS -Weverything"
+    CFLAGS="$CFLAGS -Wno-pedantic"
+    CFLAGS="$CFLAGS -Wno-unsafe-buffer-usage"
+    CFLAGS="$CFLAGS -Wno-format-nonliteral"
+    CFLAGS="$CFLAGS -Wno-disabled-macro-expansion"
+    CFLAGS="$CFLAGS -Wno-c++-keyword"
+    CFLAGS="$CFLAGS -Wno-pre-c11-compat"
+    CFLAGS="$CFLAGS -Wno-implicit-void-ptr-cast"
+    CFLAGS="$CFLAGS -Wno-implicit-int-enum-cast"
+    CFLAGS="$CFLAGS -Wno-covered-switch-default"
+    CFLAGS="$CFLAGS -Wno-reserved-identifier"  # because of __GTK_H_INSIDE__
+    CFLAGS="$CFLAGS -Wno-documentation"
+    CFLAGS="$CFLAGS -Wno-documentation-unknown-command"
+    CFLAGS="$CFLAGS -Wno-padded"
+    CFLAGS="$CFLAGS -Wno-cast-function-type-strict"
+    CFLAGS="$CFLAGS -Wno-assign-enum"
+    CFLAGS="$CFLAGS -Wno-used-but-marked-unused"
+    CFLAGS="$CFLAGS -Wno-double-promotion"
+
+    # to avoid using -Wno-unused-function
+    CFLAGS="$CFLAGS -Wno-unneeded-internal-declaration"
+
+    # only for the LSP. It does not understand unity builds
+    CFLAGS="$CFLAGS -Wno-undefined-internal"
+fi
+
+LDFLAGS="$LDFLAGS -lm"
+OS=$(uname -a)
 
 if echo "$OS" | grep -q "Linux"; then
     if echo "$OS" | grep -q "GNU"; then
@@ -175,33 +202,6 @@ if [ "$target" = "cross" ]; then
     esac
 else
     LDFLAGS="$LDFLAGS -lpthread"
-fi
-
-if [ "$CC" = "clang" ]; then
-    CFLAGS="$CFLAGS -Weverything"
-    CFLAGS="$CFLAGS -Wno-pedantic"
-    CFLAGS="$CFLAGS -Wno-unsafe-buffer-usage"
-    CFLAGS="$CFLAGS -Wno-format-nonliteral"
-    CFLAGS="$CFLAGS -Wno-disabled-macro-expansion"
-    CFLAGS="$CFLAGS -Wno-c++-keyword"
-    CFLAGS="$CFLAGS -Wno-pre-c11-compat"
-    CFLAGS="$CFLAGS -Wno-implicit-void-ptr-cast"
-    CFLAGS="$CFLAGS -Wno-implicit-int-enum-cast"
-    CFLAGS="$CFLAGS -Wno-covered-switch-default"
-    CFLAGS="$CFLAGS -Wno-reserved-identifier"  # because of __GTK_H_INSIDE__
-    CFLAGS="$CFLAGS -Wno-documentation"
-    CFLAGS="$CFLAGS -Wno-documentation-unknown-command"
-    CFLAGS="$CFLAGS -Wno-padded"
-    CFLAGS="$CFLAGS -Wno-cast-function-type-strict"
-    CFLAGS="$CFLAGS -Wno-assign-enum"
-    CFLAGS="$CFLAGS -Wno-used-but-marked-unused"
-    CFLAGS="$CFLAGS -Wno-double-promotion"
-
-    # to avoid using -Wno-unused-function
-    CFLAGS="$CFLAGS -Wno-unneeded-internal-declaration"
-
-    # only for the LSP. It does not understand unity builds
-    CFLAGS="$CFLAGS -Wno-undefined-internal"
 fi
 
 case "$target" in

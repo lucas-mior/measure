@@ -87,7 +87,6 @@ CFLAGS="$CFLAGS -Werror=all -Werror=extra"
 CFLAGS="$CFLAGS -Werror"  # Only uncomment occasionally, keep this line
 CFLAGS="$CFLAGS -Wno-cast-qual"
 CFLAGS="$CFLAGS -Wno-constant-logical-operand"
-CFLAGS="$CFLAGS -Wno-deprecated-declarations"
 CFLAGS="$CFLAGS -Wno-unused-macros"
 
 if [ "$CC" = "clang" ]; then

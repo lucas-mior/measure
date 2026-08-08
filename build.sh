@@ -88,8 +88,6 @@ CFLAGS="$CFLAGS -Werror"  # Only uncomment occasionally, keep this line
 CFLAGS="$CFLAGS -Wno-cast-qual"
 CFLAGS="$CFLAGS -Wno-constant-logical-operand"
 CFLAGS="$CFLAGS -Wno-deprecated-declarations"
-CFLAGS="$CFLAGS -Wno-unknown-pragmas"
-CFLAGS="$CFLAGS -Wno-unknown-warning-option"
 CFLAGS="$CFLAGS -Wno-unused-macros"
 
 if [ "$CC" = "clang" ]; then
@@ -110,7 +108,6 @@ if [ "$CC" = "clang" ]; then
     CFLAGS="$CFLAGS -Wno-padded"
     CFLAGS="$CFLAGS -Wno-assign-enum"
     CFLAGS="$CFLAGS -Wno-used-but-marked-unused"
-    CFLAGS="$CFLAGS -Wno-double-promotion"
 
     # to avoid using -Wno-unused-function
     CFLAGS="$CFLAGS -Wno-unneeded-internal-declaration"

@@ -111,7 +111,6 @@ if [ "$CC" = "clang" ]; then
     CFLAGS="$CFLAGS -Wno-documentation"
     CFLAGS="$CFLAGS -Wno-documentation-unknown-command"
     CFLAGS="$CFLAGS -Wno-padded"
-    CFLAGS="$CFLAGS -Wno-cast-function-type-strict"
     CFLAGS="$CFLAGS -Wno-assign-enum"
     CFLAGS="$CFLAGS -Wno-used-but-marked-unused"
     CFLAGS="$CFLAGS -Wno-double-promotion"

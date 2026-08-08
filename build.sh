@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 # shellcheck disable=SC2086
 
@@ -10,9 +10,6 @@ dir=$(dirname "$(readlink -f "$0")")
 export XDG_DATA_DIRS=""
 
 # export LC_ALL=C
-
-CPPFLAGS="$CPPFLAGS -I$dir/cbase"
-CPPFLAGS="$CPPFLAGS -I."
 
 cd "$dir" || exit
 program=$(get_program "$0")
@@ -46,25 +43,14 @@ if [ "$target" = "cross" ] && [ -n "${2:-}" ]; then
     target_line="$target $2"
 fi
 
-target_supported () {
-    wanted=$1
-    printf '%s\n' "$targets" | awk -v wanted="$wanted" '
-        {
-            line = $0
-            sub(/^# /, "", line)
-        }
-        line == wanted { found = 1 }
-        END { exit !found }
-    '
-}
-
-if ! target_supported "$target_line" && ! target_supported "$target"; then
+if ! target_supported "$targets" "$target_line" \
+        && ! target_supported "$targets" "$target"; then
     echo "usage: $script <targets>"
     printf '%s\n' "$targets"
     exit 1
 fi
 
-printf "\n${script} ${RED}${1} ${2}$RES\n"
+printf "\n${script} ${RED}${1:-} ${2:-}$RES\n"
 
 PREFIX="${PREFIX:-/usr/local}"
 DESTDIR="${DESTDIR:-/}"
@@ -73,6 +59,7 @@ main="main.c"
 exe="bin/$program"
 mkdir -p "$(dirname "$exe")"
 
+CPPFLAGS="$CPPFLAGS -I. -I$dir/cbase"
 CPPFLAGS="$CPPFLAGS -D_DEFAULT_SOURCE"
 CPPFLAGS="$CPPFLAGS -DGETTEXT_PACKAGE=$program"
 CPPFLAGS="$CPPFLAGS -DLOCALEDIR=$PREFIX/share/locale"
@@ -80,7 +67,7 @@ CPPFLAGS="$CPPFLAGS -DLOCALEDIR=$PREFIX/share/locale"
 CFLAGS="$CFLAGS -std=c11"
 CFLAGS="$CFLAGS -Wfatal-errors"
 CFLAGS="$CFLAGS -Wall -Wextra"
-# CFLAGS="$CFLAGS -Werror"
+CFLAGS="$CFLAGS -Werror"
 CFLAGS="$CFLAGS -Wno-format-pedantic"
 CFLAGS="$CFLAGS -Wno-unknown-warning-option"
 CFLAGS="$CFLAGS -Wno-gnu-union-cast"
@@ -116,10 +103,6 @@ if echo "$OS" | grep -q "Linux"; then
         GNUSOURCE="-D_GNU_SOURCE"
     fi
 fi
-
-option_remove() {
-    echo "$1" | sed -E "s| *$2 +| |g"
-}
 
 compile_with_chibicc () {
     args="$*"
@@ -164,7 +147,7 @@ release)
     CFLAGS="$CFLAGS $GNUSOURCE -DRELEASING=1 -O2 -flto -march=native -ftree-vectorize"
     ;;
 fast_feedback)
-    CFLAGS="$CFLAGS $GNUSOURCE -Werror"
+    CFLAGS="$CFLAGS $GNUSOURCE"
     ;;
 *)
     CFLAGS="$CFLAGS -O2"
@@ -212,7 +195,6 @@ if [ "$CC" = "clang" ]; then
     CFLAGS="$CFLAGS -Wno-assign-enum"
     CFLAGS="$CFLAGS -Wno-used-but-marked-unused"
     CFLAGS="$CFLAGS -Wno-double-promotion"
-    CFLAGS="$CFLAGS -Wno-cast-function-type-strict"
 
     # to avoid using -Wno-unused-function
     CFLAGS="$CFLAGS -Wno-unneeded-internal-declaration"
@@ -230,8 +212,7 @@ fast_feedback)
 build|debug|run|release)
     trace_on
 
-    ctags --kinds-C=+l+d cbase/*.c *.h src/*.c  2> /dev/null || true
-    vtags.sed tags | sort | uniq > .tags.vim 2> /dev/null || true
+    build_tags cbase . src
     if [ "$CC" = "chibicc" ]; then
         compile_with_chibicc $CPPFLAGS $CFLAGS main.c -o $exe $LDFLAGS
     else

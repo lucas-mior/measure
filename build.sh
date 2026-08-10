@@ -99,29 +99,6 @@ if echo "$OS" | grep -q "Linux"; then
     fi
 fi
 
-compile_with_chibicc () {
-    args="$*"
-    while ! problem=$(chibicc $args 2>&1); do
-        trace_off
-        sleep 0.4
-        if echo "$problem" | grep -q "unknown argument:"; then
-            arg=$(echo "$problem" | awk '{print $NF}')
-            printf "\nRemoving argument $arg...\n"
-            args=$(option_remove "$args" "$arg")
-        elif echo "$problem" | grep -q "unknown file extension:"; then
-            arg=$(echo "$problem" | awk '{print $NF}')
-            printf "\nRemoving argument $arg...\n"
-            args=$(option_remove "$args" "$arg")
-        else
-            printf "\n\nError compiling with chibicc:\n\n${problem}\n\n"
-            return 1
-        fi
-        printf "\n"
-        trace_on
-    done
-    return 0
-}
-
 case "$target" in
 debug)
     CFLAGS="$CFLAGS -g3 -fsanitize=undefined"
@@ -181,11 +158,7 @@ build|debug|run|release)
     trace_on
 
     build_tags cbase . src
-    if [ "$CC" = "chibicc" ]; then
-        compile_with_chibicc $CPPFLAGS $CFLAGS main.c -o $exe $LDFLAGS
-    else
-        $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
-    fi
+    $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
 
     if [ $target = "run" ]; then
         $exe $2
@@ -212,58 +185,8 @@ install)
     exit
     ;;
 test)
-    find . -iname "*.c" | sort | while read -r src; do
-        trace_off
-        name=$(basename "$src")
-
-        if [ -n "$2" ] && [ "$name" != "$2" ]; then
-            continue
-        fi
-        if [ "$name" = "main.c" ]; then
-            continue
-        fi
-        if echo "$src" | grep -q "stc/"; then
-            continue
-        fi
-        name=$(echo "$name" | sed 's/\.c//')
-        test_exe="/tmp/${name}_test"
-
-        printf "\nTesting ${RED}${src}${RES} ...\n"
-
-        flags="$(awk '/\/\/ flags:/ { $1=$2=""; print $0 }' "$src")"
-        if [ $src = "gwindows_functions.c" ]; then
-            if ! zig version; then
-                continue
-            fi
-            cmdline="zig cc $CPPFLAGS $CFLAGS"
-            cmdline=$(option_remove "$cmdline" "-D_GNU_SOURCE")
-            cmdline="$cmdline -target x86_64-windows-gnu"
-            cmdline="$cmdline -Wno-unused-variable -DTESTING_$name=1 -DTESTING=1"
-            cmdline="$cmdline $flags -o $test_exe $src"
-        else
-            cmdline="$CC $CPPFLAGS $CFLAGS"
-            cmdline="$cmdline -Wno-unused-variable -DTESTING_$name=1 -DTESTING=1 $LDFLAGS"
-            cmdline="$cmdline $flags -o $test_exe $src"
-        fi
-
-        if [ "$CC" = "chibicc" ]; then
-            cmdline_no_cc=$(option_remove "$cmdline" "$CC")
-            trace_on
-            if compile_with_chibicc "$cmdline_no_cc"; then
-                /tmp/${name}_test
-            else
-                exit 1
-            fi
-        else
-            trace_on
-            if $cmdline; then
-                $test_exe || gdb $test_exe -ex run
-            else
-                exit
-            fi
-        fi
-        trace_off
-    done
+    TEST_WINDOWS_SOURCE_PATTERN='(^|/)g?windows_functions\.c$' \
+        test "$2"
     exit
     ;;
 uninstall)

@@ -61,7 +61,6 @@ mkdir -p "$(dirname "$exe")"
 CC=$(get_compiler "$target")
 
 CPPFLAGS="$CPPFLAGS -I. -I$dir/cbase"
-CPPFLAGS="$CPPFLAGS -D_DEFAULT_SOURCE"
 CPPFLAGS="$CPPFLAGS -DGETTEXT_PACKAGE=$program"
 CPPFLAGS="$CPPFLAGS -DLOCALEDIR=$PREFIX/share/locale"
 
@@ -91,35 +90,27 @@ if [ "$CC" = "clang" ]; then
 fi
 
 LDFLAGS="$LDFLAGS -lm"
-OS=$(uname -a)
-
-if echo "$OS" | grep -q "Linux"; then
-    if echo "$OS" | grep -q "GNU"; then
-        GNUSOURCE="-D_GNU_SOURCE"
-    fi
-fi
 
 case "$target" in
 debug)
     CFLAGS="$CFLAGS -g3 -fsanitize=undefined"
-    CPPFLAGS="$CPPFLAGS $GNUSOURCE -DDEBUGGING=1"
+    CPPFLAGS="$CPPFLAGS -DDEBUGGING=1"
     exe="bin/${program}_debug"
     ;;
 test)
-    CFLAGS="$CFLAGS -g $GNUSOURCE -DDEBUGGING=1 -fsanitize=undefined"
+    CFLAGS="$CFLAGS -g -DDEBUGGING=1 -fsanitize=undefined"
     ;;
 check)
     CC=gcc
-    CFLAGS="$CFLAGS $GNUSOURCE -DDEBUGGING=1 -fanalyzer"
+    CFLAGS="$CFLAGS -DDEBUGGING=1 -fanalyzer"
     ;;
 build|run)
-    CFLAGS="$CFLAGS $GNUSOURCE -O2 -flto -march=native -ftree-vectorize"
+    CFLAGS="$CFLAGS -O2 -flto -march=native -ftree-vectorize"
     ;;
 release)
-    CFLAGS="$CFLAGS $GNUSOURCE -DRELEASING=1 -O2 -flto -march=native -ftree-vectorize"
+    CFLAGS="$CFLAGS -DRELEASING=1 -O2 -flto -march=native -ftree-vectorize"
     ;;
 fast_feedback)
-    CFLAGS="$CFLAGS $GNUSOURCE"
     ;;
 *)
     CFLAGS="$CFLAGS -O2"
@@ -130,7 +121,6 @@ if [ "$target" = "cross" ]; then
     cross="$2"
     CC="zig cc"
     CFLAGS="$CFLAGS -target $cross"
-    CFLAGS=$(option_remove "$CFLAGS" "-D_GNU_SOURCE")
 
     case $cross in
     x86_64-macos|aarch64-macos)

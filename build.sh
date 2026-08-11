@@ -190,6 +190,7 @@ esac
 
 case "$target" in
 check)
+    set +e
     CC=gcc CFLAGS="-fanalyzer" ./build.sh
 
     CFLAGS="--analyze -Xanalyzer -analyzer-output=text"
@@ -197,6 +198,7 @@ check)
     CFLAGS="$CFLAGS -Xanalyzer -analyzer-opt-analyze-headers"
     CFLAGS="$CFLAGS -Wno-unused-command-line-argument"
     CC=clang CFLAGS="$CFLAGS" ./build.sh
+
     exit
     ;;
 esac

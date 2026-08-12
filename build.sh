@@ -37,20 +37,10 @@ EOF_TARGETS
 )
 fi
 
-target="${1:-debug}"
-target_line=$target
-if [ "$target" = "cross" ] && [ -n "${2:-}" ]; then
-    target_line="$target $2"
-fi
+build_parse_args "$@"
+build_validate_mode "$script" "$targets"
 
-if ! target_supported "$targets" "$target_line" \
-        && ! target_supported "$targets" "$target"; then
-    echo "usage: $script <targets>"
-    printf '%s\n' "$targets"
-    exit 1
-fi
-
-printf "\n${script} ${RED}${1:-} ${2:-}$RES\n"
+build_print_invocation "$script"
 
 PREFIX="${PREFIX:-/usr/local}"
 DESTDIR="${DESTDIR:-/}"
@@ -58,7 +48,7 @@ DESTDIR="${DESTDIR:-/}"
 exe="bin/$program"
 mkdir -p "$(dirname "$exe")"
 
-CC=$(get_compiler "$target")
+CC=$(get_compiler "$mode")
 
 CPPFLAGS="$CPPFLAGS -I. -I$dir/cbase"
 CPPFLAGS="$CPPFLAGS -DGETTEXT_PACKAGE=$program"
@@ -91,7 +81,7 @@ fi
 
 LDFLAGS="$LDFLAGS -lm"
 
-case "$target" in
+case "$mode" in
 debug)
     CFLAGS="$CFLAGS -g3 -fsanitize=undefined"
     CPPFLAGS="$CPPFLAGS -DDEBUGGING=1"
@@ -117,8 +107,8 @@ fast_feedback)
     ;;
 esac
 
-if [ "$target" = "cross" ]; then
-    cross="$2"
+if [ "$mode" = "cross" ]; then
+    cross="$target"
     CC="zig cc"
     CFLAGS="$CFLAGS -target $cross"
 
@@ -138,7 +128,7 @@ else
     LDFLAGS="$LDFLAGS -lpthread"
 fi
 
-case "$target" in
+case "$mode" in
 fast_feedback)
     trace_on
     $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
@@ -150,8 +140,12 @@ build|debug|run|release)
     build_tags cbase . src
     $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
 
-    if [ $target = "run" ]; then
-        $exe $2
+    if [ $mode = "run" ]; then
+        if [ -n "$target" ]; then
+            $exe "$target"
+        else
+            $exe
+        fi
     fi
 
     trace_off
@@ -176,7 +170,7 @@ install)
     ;;
 test)
     TEST_WINDOWS_SOURCE_PATTERN='(^|/)g?windows_functions\.c$' \
-        test "$2"
+        test "$target"
     exit
     ;;
 uninstall)
@@ -188,7 +182,7 @@ uninstall)
     ;;
 esac
 
-case "$target" in
+case "$mode" in
 check)
     set +e
     CC=gcc CFLAGS="-fanalyzer" ./build.sh

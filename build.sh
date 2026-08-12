@@ -3,15 +3,16 @@
 # shellcheck disable=SC2086
 
 dir=$(dirname "$(readlink -f "$0")")
-# shellcheck source=/dev/null
-. "$dir/cbase/common.sh"
+cd "$dir" || exit
+
+# shellcheck source=./cbase/common.sh
+. "./cbase/common.sh"
 
 # gtk might not work correctly if you have stuff here
 export XDG_DATA_DIRS=""
 
 # export LC_ALL=C
 
-cd "$dir" || exit
 program=$(common_get_program "$0")
 script=$(basename "$0")
 
@@ -50,7 +51,7 @@ mkdir -p "$(dirname "$exe")"
 
 CC=$(common_get_compiler "$mode")
 
-CPPFLAGS="$CPPFLAGS -I. -I$dir/cbase"
+CPPFLAGS="$CPPFLAGS -I. -Icbase"
 CPPFLAGS="$CPPFLAGS -DGETTEXT_PACKAGE=$program"
 CPPFLAGS="$CPPFLAGS -DLOCALEDIR=$PREFIX/share/locale"
 

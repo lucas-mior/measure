@@ -12,7 +12,7 @@ export XDG_DATA_DIRS=""
 # export LC_ALL=C
 
 cd "$dir" || exit
-program=$(get_program "$0")
+program=$(common_get_program "$0")
 script=$(basename "$0")
 
 if [ -f ./targets ]; then
@@ -37,10 +37,10 @@ EOF_TARGETS
 )
 fi
 
-build_parse_args "$@"
-build_validate_mode "$script" "$targets"
+common_build_parse_args "$@"
+common_build_validate_mode "$script" "$targets"
 
-build_print_invocation "$script"
+common_build_print_invocation "$script"
 
 PREFIX="${PREFIX:-/usr/local}"
 DESTDIR="${DESTDIR:-/}"
@@ -48,7 +48,7 @@ DESTDIR="${DESTDIR:-/}"
 exe="bin/$program"
 mkdir -p "$(dirname "$exe")"
 
-CC=$(get_compiler "$mode")
+CC=$(common_get_compiler "$mode")
 
 CPPFLAGS="$CPPFLAGS -I. -I$dir/cbase"
 CPPFLAGS="$CPPFLAGS -DGETTEXT_PACKAGE=$program"
@@ -137,7 +137,7 @@ fast_feedback)
 build|debug|run|release)
     trace_on
 
-    build_tags cbase . src
+    common_build_tags cbase . src
     $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
 
     if [ $mode = "run" ]; then
@@ -170,7 +170,7 @@ install)
     ;;
 test)
     TEST_WINDOWS_SOURCE_PATTERN='(^|/)g?windows_functions\.c$' \
-        test "$target"
+        common_test "$target"
     exit
     ;;
 uninstall)

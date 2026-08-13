@@ -19,6 +19,14 @@ script=$(basename "$0")
 
 common_build_parse_args "$@"
 
+case "$mode" in
+build|check|cross|debug|fast_feedback|install|release|run|test|uninstall)
+    ;;
+*)
+    common_build_unknown_mode
+    ;;
+esac
+
 common_build_print_invocation "$script"
 
 PREFIX="${PREFIX:-/usr/local}"
@@ -82,9 +90,13 @@ release)
 fast_feedback)
     ;;
 cross)
+    common_build_cross_all
     CFLAGS="$CFLAGS -O2"
     ;;
+build|check|cross|debug|fast_feedback|install|release|run|test|uninstall)
+    ;;
 *)
+    common_build_unknown_mode
     ;;
 esac
 
@@ -175,15 +187,5 @@ check)
     CC=clang CFLAGS="$CFLAGS" ./build.sh
 
     exit
-    ;;
-esac
-
-
-case "$mode" in
-build|check|cross|debug|fast_feedback|install|release|run|test|uninstall)
-    ;;
-*)
-    echo "Unknown mode $mode"
-    exit 1
     ;;
 esac

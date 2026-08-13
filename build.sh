@@ -64,7 +64,7 @@ case "$mode" in
 debug)
     CFLAGS="$CFLAGS -g3"
     CPPFLAGS="$CPPFLAGS -DDEBUGGING=1"
-    exe="bin/${program}_debug"
+    exe="bin/$program"
     ;;
 test)
     CFLAGS="$CFLAGS -g -DDEBUGGING=1"

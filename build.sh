@@ -84,12 +84,12 @@ LDFLAGS="$LDFLAGS -lm"
 
 case "$mode" in
 debug)
-    CFLAGS="$CFLAGS -g3 -fsanitize=undefined"
+    CFLAGS="$CFLAGS -g3"
     CPPFLAGS="$CPPFLAGS -DDEBUGGING=1"
     exe="bin/${program}_debug"
     ;;
 test)
-    CFLAGS="$CFLAGS -g -DDEBUGGING=1 -fsanitize=undefined"
+    CFLAGS="$CFLAGS -g -DDEBUGGING=1"
     ;;
 check)
     CC=gcc

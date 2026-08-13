@@ -16,30 +16,8 @@ export XDG_DATA_DIRS=""
 program=$(common_get_program "$0")
 script=$(basename "$0")
 
-if [ -f ./targets ]; then
-    . ./targets
-else
-    targets=$(cat <<'EOF_TARGETS'
-build
-debug
-fast_feedback
-install
-uninstall
-test
-check
-release
-run
-cross x86_64-linux
-cross aarch64-linux
-cross x86_64-macos
-cross aarch64-macos
-cross x86_64-windows-gnu
-EOF_TARGETS
-)
-fi
 
 common_build_parse_args "$@"
-common_build_validate_mode "$script" "$targets"
 
 common_build_print_invocation "$script"
 
@@ -103,8 +81,10 @@ release)
     ;;
 fast_feedback)
     ;;
-*)
+cross)
     CFLAGS="$CFLAGS -O2"
+    ;;
+*)
     ;;
 esac
 
@@ -135,7 +115,7 @@ fast_feedback)
     $CC $CPPFLAGS $CFLAGS main.c -o "$exe" $LDFLAGS
     trace_off
     ;;
-build|debug|run|release)
+build|cross|debug|run|release)
     trace_on
 
     common_build_tags cbase . src
@@ -195,5 +175,15 @@ check)
     CC=clang CFLAGS="$CFLAGS" ./build.sh
 
     exit
+    ;;
+esac
+
+
+case "$mode" in
+build|check|cross|debug|fast_feedback|install|release|run|test|uninstall)
+    ;;
+*)
+    echo "Unknown mode $mode"
+    exit 1
     ;;
 esac

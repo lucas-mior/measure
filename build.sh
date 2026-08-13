@@ -37,6 +37,19 @@ mkdir -p "$(dirname "$exe")"
 
 CC=$(common_get_compiler "$mode")
 
+OS=$(uname -a)
+if [ "$mode" = "cross" ] && [ "${target:-}" != "all" ]; then
+    OS="$target"
+fi
+
+case "$OS" in
+*MINGW*|*MSYS*|*CYGWIN*|*mingw*|*msys*|*cygwin*|*windows*)
+    ;;
+*)
+    CFLAGS="$CFLAGS -pthread"
+    ;;
+esac
+
 CPPFLAGS="$CPPFLAGS -I. -Icbase"
 CPPFLAGS="$CPPFLAGS -DGETTEXT_PACKAGE=$program"
 CPPFLAGS="$CPPFLAGS -DLOCALEDIR=$PREFIX/share/locale"
@@ -91,7 +104,19 @@ fast_feedback)
     ;;
 cross)
     common_build_cross_all
+    cross="$target"
+
     CFLAGS="$CFLAGS -O2"
+    CFLAGS="$CFLAGS -Wno-padded"
+    CFLAGS="$CFLAGS -target $cross"
+
+    case "$cross" in
+    *windows*)
+        exe="bin/$program.exe"
+        ;;
+    *)
+        ;;
+    esac
     ;;
 build|check|cross|debug|fast_feedback|install|release|run|test|uninstall)
     ;;
@@ -99,27 +124,6 @@ build|check|cross|debug|fast_feedback|install|release|run|test|uninstall)
     common_build_unknown_mode
     ;;
 esac
-
-if [ "$mode" = "cross" ]; then
-    cross="$target"
-    CC="zig cc"
-    CFLAGS="$CFLAGS -target $cross"
-
-    case $cross in
-    x86_64-macos|aarch64-macos)
-        CFLAGS="$CFLAGS -fno-lto"
-        LDFLAGS="$LDFLAGS -lpthread"
-        ;;
-    *windows*)
-        exe="bin/$program.exe"
-        ;;
-    *)
-        LDFLAGS="$LDFLAGS -lpthread"
-        ;;
-    esac
-else
-    LDFLAGS="$LDFLAGS -lpthread"
-fi
 
 case "$mode" in
 fast_feedback)

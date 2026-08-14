@@ -103,7 +103,7 @@ release)
 fast_feedback)
     ;;
 cross)
-    common_build_cross_all
+    common_build_cross_all windows
     cross="$target"
 
     CFLAGS="$CFLAGS -O2"

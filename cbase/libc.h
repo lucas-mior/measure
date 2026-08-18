@@ -80,12 +80,6 @@
 #include <stdnoreturn.h>
 #endif
 #include <string.h>
-#if !defined(_MSC_VER)
-#include <tgmath.h>
-#endif
-#include <time.h>
-#include <wchar.h>
-#include <wctype.h>
 
 // optional C11 headers
 #if !defined(_MSC_VER) && !defined(__STDC_NO_COMPLEX__)
@@ -94,6 +88,10 @@
 #undef I
 #endif
 #endif
+
+#include <time.h>
+#include <wchar.h>
+#include <wctype.h>
 
 #if !OS_WINDOWS && !defined(__STDC_NO_THREADS__)
 #include <threads.h>

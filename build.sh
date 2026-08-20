@@ -88,7 +88,7 @@ debug)
     exe="bin/$program"
     ;;
 test)
-    CFLAGS="$CFLAGS -g -DDEBUGGING=1"
+    CFLAGS="$CFLAGS -g3 -DDEBUGGING=1"
     ;;
 check)
     CC=gcc
@@ -166,8 +166,7 @@ install)
     exit
     ;;
 test)
-    TEST_WINDOWS_SOURCE_PATTERN='(^|/)g?windows_functions\.c$' \
-        common_test "$target"
+    common_test "$target"
     exit
     ;;
 uninstall)

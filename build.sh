@@ -90,7 +90,6 @@ cross)
     cross="$target"
 
     CFLAGS="$CFLAGS -O2"
-    CFLAGS="$CFLAGS -Wno-padded"
     CFLAGS="$CFLAGS -target $cross"
 
     case "$cross" in

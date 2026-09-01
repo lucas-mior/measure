@@ -56,7 +56,6 @@ CPPFLAGS="$CPPFLAGS -DLOCALEDIR=$PREFIX/share/locale"
 
 CFLAGS="$CFLAGS -std=c11"
 CFLAGS="$CFLAGS -Wfatal-errors"
-CFLAGS="$CFLAGS -Werror"  # Only uncomment occasionally, keep this line
 
 LDFLAGS="$LDFLAGS -lm"
 

@@ -44,9 +44,9 @@ int main(int argc, char **argv) {
         llong nanos = t1.tv_nsec - t0.tv_nsec;
         double total_seconds = (double)seconds + (double)nanos / 1.0e9;
 
-        printf("\nTiming for command:\n\n"
-               BLUE("%s\n\n")
-               BLUE("%f")"s\n\n", command, total_seconds);
+        fmt_printf("\nTiming for command:\n\n"
+                   BLUE("%s\n\n")
+                   BLUE("%f")"s\n\n", command, total_seconds);
         fflush(stdout);
     }
     exit(EXIT_SUCCESS);

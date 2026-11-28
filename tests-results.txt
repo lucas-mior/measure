@@ -1,0 +1,400 @@
+
+build.sh [01;38;2;255;000;000mtest[0m
++ + tcctcc -I. -Icbase -I. -DGETTEXT_PACKAGE=measure -Icbase -DLOCALEDIR=/usr/local/share/locale -DGETTEXT_PACKAGE=measure -pthread -DLOCALEDIR=/usr/local/share/locale -std=c11 -Wfatal-errors -pthread -g3 -std=c11 -DDEBUGGING=1 -Wfatal-errors -DTESTING=1 -g3 -DTESTING_memory=0 -DDEBUGGING=1 -c -DTESTING=1 cbase/memory.c -DTESTING_allocator=0 -o -c bin/obj/test-cbase/tcc/memory.o cbase/allocator.c
+ -o bin/obj/test-cbase/tcc/allocator.o
++ + + tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale+  -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_array=0 -c cbase/array.c -o bin/obj/test-cbase/tcc/array.o
+tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_assertions=0 -c cbase/assertions.c -o bin/obj/test-cbase/tcc/assertions.o
+tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_rapidhash=0 -c cbase/rapidhash.c -o bin/obj/test-cbase/tcc/rapidhash.o
++ + tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3tcc -DDEBUGGING=1 -I. -DTESTING=1 -Icbase -DTESTING_generic=0 -DGETTEXT_PACKAGE=measure -c -DLOCALEDIR=/usr/local/share/locale cbase/generic.c -pthread -o -std=c11 bin/obj/test-cbase/tcc/generic.o -Wfatal-errors
+ -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_time=0 -c cbase/time.c -o bin/obj/test-cbase/tcc/time.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_util=0 -c cbase/util.c -o bin/obj/test-cbase/tcc/util.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_ryu=0 -c cbase/ryu.c -o bin/obj/test-cbase/tcc/ryu.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_arena=0 -c cbase/arena.c -o bin/obj/test-cbase/tcc/arena.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_utf8=0 -c cbase/utf8.c -o bin/obj/test-cbase/tcc/utf8.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_numtostr=0 -c cbase/numtostr.c -o bin/obj/test-cbase/tcc/numtostr.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_strtonum=0 -c cbase/strtonum.c -o bin/obj/test-cbase/tcc/strtonum.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_windows=0 -c cbase/windows.c -o bin/obj/test-cbase/tcc/windows.o
+tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_ascii_normalization=0 -c cbase/ascii_normalization.c -o bin/obj/test-cbase/tcc/ascii_normalization.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_string=0 -c cbase/string.c -o bin/obj/test-cbase/tcc/string.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_fs=0 -c cbase/fs.c -o bin/obj/test-cbase/tcc/fs.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_directory=0 -c cbase/directory.c -o bin/obj/test-cbase/tcc/directory.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_threads=0 -c cbase/threads.c -o bin/obj/test-cbase/tcc/threads.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_fmt=0 -c cbase/fmt.c -o bin/obj/test-cbase/tcc/fmt.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_command=0 -c cbase/command.c -o bin/obj/test-cbase/tcc/command.o
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING=1 -DTESTING_some_math=0 -c cbase/some_math.c -o bin/obj/test-cbase/tcc/some_math.o
++ ar rcs bin/obj/test-cbase/tcc/libcbase.a bin/obj/test-cbase/tcc/arena.o bin/obj/test-cbase/tcc/allocator.o bin/obj/test-cbase/tcc/memory.o bin/obj/test-cbase/tcc/rapidhash.o bin/obj/test-cbase/tcc/generic.o bin/obj/test-cbase/tcc/assertions.o bin/obj/test-cbase/tcc/array.o bin/obj/test-cbase/tcc/utf8.o bin/obj/test-cbase/tcc/ascii_normalization.o bin/obj/test-cbase/tcc/util.o bin/obj/test-cbase/tcc/strtonum.o bin/obj/test-cbase/tcc/numtostr.o bin/obj/test-cbase/tcc/string.o bin/obj/test-cbase/tcc/time.o bin/obj/test-cbase/tcc/fs.o bin/obj/test-cbase/tcc/ryu.o bin/obj/test-cbase/tcc/windows.o bin/obj/test-cbase/tcc/directory.o bin/obj/test-cbase/tcc/threads.o bin/obj/test-cbase/tcc/some_math.o bin/obj/test-cbase/tcc/fmt.o bin/obj/test-cbase/tcc/command.o
+
+Testing [01;38;2;255;000;000m./cbase/arena.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_arena=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/arena_test ./cbase/arena.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+Expected error in arena_push: Object is too big for arena.
+Arena 0x7fefbdb00000 {
+  name: arena
+  begin: 0x7fefbdb00030
+  pos: 0x7fefbdb00070
+  size: 3145728
+  npushed: 2
+  next:    0x7fefbd800000
+} -> Arena 0x7fefbd800000 {
+  name: (null)
+  begin: 0x7fefbd800030
+  pos: 0x7fefbd800030
+  size: 3145728
+  npushed: 0
+  next:    (nil)
+}
+
+Testing [01;38;2;255;000;000m./cbase/array.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_array=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/array_test ./cbase/array.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/assertions.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_assertions=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/assertions_test ./cbase/assertions.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+The following assertions are supposed to fail
+./cbase/assertions.c:1431:[0;31mmain()[0m: Assertion failed:
+a = 0.000000 == 1.000000 = b
+./cbase/assertions.c:1432:[0;31mmain()[0m: Assertion failed:
+string_null = (nil) == 0x86b4ec = string_some
+./cbase/assertions.c:1433:[0;31mmain()[0m: Assertion failed:
+string_some = som == "none" = none
+./cbase/assertions.c:1434:[0;31mmain()[0m: Assertion failed:
+string_some = some != "some" = some
+./cbase/assertions.c:1435:[0;31mmain()[0m: Assertion failed:
+string_some = some != some = "some"
+./cbase/assertions.c:1436:[0;31mmain()[0m: Assertion failed:
+[int32]a = 0.000000 > 1.000000 = b[double64]
+./cbase/assertions.c:1437:[0;31mmain()[0m: Assertion failed:
+[double64]b = 1.000000 < 0.000000 = a[int32]
+./cbase/assertions.c:1438:[0;31mmain()[0m: Assertion failed:
+[int32]a = 0.000000 >= 1.000000 = b[double64]
+./cbase/assertions.c:1439:[0;31mmain()[0m: Assertion failed:
+[double64]b = 1.000000 <= 0.000000 = a[int32]
+./cbase/assertions.c:1440:[0;31mmain()[0m: Assertion failed:
+-0.5 = -0.500000 > 0.000000 = 0.0
+./cbase/assertions.c:1441:[0;31mmain()[0m: Assertion failed:
+0.5 = 0.500000 <= 0.000000 = 0.0
+./cbase/assertions.c:1442:[0;31mmain()[0m: Assertion failed:
+(void *)&array[1] = 0x7ffcb9042594 < 0x7ffcb9042590 = (void *)&array[0]
+./cbase/assertions.c:1443:[0;31mmain()[0m: Assertion failed:
+1 = 1 == 0 = 0
+./cbase/assertions.c:1444:[0;31mmain()[0m: Assertion failed:
+too_large = 18446744073709551615 is larger than LLONG_MAX
+./cbase/assertions.c:1445:[0;31mmain()[0m: Assertion failed:
+too_large = 18446744073709551615 is larger than LLONG_MAX
+./cbase/assertions.c:1446:[0;31mmain()[0m: Assertion failed:
+too_large = 18446744073709551615 is larger than LLONG_MAX
+./cbase/assertions.c:1447:[0;31mmain()[0m: Assertion failed:
+too_large = 18446744073709551615 is larger than LLONG_MAX
+./cbase/assertions.c:1448:[0;31mmain()[0m: Assertion failed:
+too_large = 18446744073709551615 is larger than LLONG_MAX
+./cbase/assertions.c:1449:[0;31mmain()[0m: Assertion failed:
+18446744073709551615ULL = 18446744073709551615 is larger than LLONG_MAX
+./cbase/assertions.c:1450:[0;31mmain()[0m: Assertion failed:
+string_null = (nil) != 0x86b4ec = string_some
+./cbase/assertions.c:1451:[0;31mmain()[0m: Assertion failed:
+string_null = (nil) != (nil) = (char *)((void*)0)
+./cbase/assertions.c:1452:[0;31mmain()[0m: Assertion failed:
+yes = 1 > 0 = (_Bool)0
+./cbase/assertions.c:1453:[0;31mmain()[0m: Assertion failed:
+Unsupported comparison: a (integer), yes (bool)
+./cbase/assertions.c:1454:[0;31mmain()[0m: Assertion failed:
+[double64]close_a = 0.30000000000000004 !~= 0.29999999999999999 = close_b[double64]
+floating diff = 5.5511151231257827e-17, ulps = 1, max_ulps = 16
+./cbase/assertions.c:1455:[0;31mmain()[0m: Assertion failed:
+[double64]close_a = 0.30000000000000004 !~= 0.29999999999999999 = close_b[double64]
+floating diff = 5.5511151231257827e-17, tolerance = 0.01
+./cbase/assertions.c:1456:[0;31mmain()[0m: Assertion failed:
+expected to find substring'''
+[0;32mdelta
+[0m''' in '''[0;34malpha beta gamma
+[0m'''
+./cbase/assertions.c:1457:[0;31mmain()[0m: Assertion failed:
+expected to not find substring'''
+[0;32mbeta
+[0m''' in '''[0;34malpha beta
+ gamma
+[0m'''
+./cbase/assertions.c:1458:[0;31mmain()[0m: Assertion failed:
+expected glob to match:
+  string: "alpha beta gamma"[16] = '''[0;34malpha beta gamma[0m'''
+  glob:   "alpha*delta"[11] = '''[0;32malpha*delta[0m'''
+./cbase/assertions.c:1459:[0;31mmain()[0m: Assertion failed:
+expected glob to not match:
+  string: "alpha beta gamma"[16] = '''[0;34malpha beta gamma[0m'''
+  glob:   "alpha*gamma"[11] = '''[0;32malpha*gamma[0m'''
+./cbase/assertions.c:1460:[0;31mmain()[0m: Assertion failed:
+invalid range: array + LENGTH(array) = 0x7ffcb90425b8 must be before array = 0x7ffcb9042590
+./cbase/assertions.c:1461:[0;31mmain()[0m: Assertion failed:
+&array[0] = 0x7ffcb9042590 outside [array = 0x7ffcb9042590, array + LENGTH(array) = 0x7ffcb90425b8)
+./cbase/assertions.c:1462:[0;31mmain()[0m: Assertion failed:
+[int32]-1 = -1 between [0, 1]
+./cbase/assertions.c:1463:[0;31mmain()[0m: Assertion failed:
+[int32]2 = 2 between [0, 1]
+All assertions tests passed.
+
+Testing [01;38;2;255;000;000m./cbase/cbase.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_cbase=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/cbase_test ./cbase/cbase.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/command.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_command=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/command_test ./cbase/command.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+[0;31mecho[0m --val=123 test./cbase/command.c:1846:main: called 1 times
+
+
+time elapsed ./cbase/command.c:1849:main
+0.0285774s = 28577.4us per item.
+
+Testing [01;38;2;255;000;000m./cbase/directory.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_directory=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/directory_test ./cbase/directory.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/fmt.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_fmt=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/fmt_test ./cbase/fmt.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/fs.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_fs=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/fs_test ./cbase/fs.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+fs.c:1072 read_entire_file():Error opening [0;31m/tmp/fs_AOiGdJ/missing[0m for reading: No such file or directory
+Testing [01;38;2;255;000;000m./cbase/fs_windows.c[0m ...
++ zig cc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -target x86_64-windows-gnu -DTESTING_fs_windows=1 -DTESTING=1 -o /tmp/fs_windows_test ./cbase/fs_windows.c
++ compiled=0
+bin == bin
+build.sh == build.sh
+cbase == cbase
+compile_commands.json == compile_commands.json
+main.c == main.c
+measure.1 == measure.1
+README.md == README.md
+tags == tags
+targets == targets
+tests-results.txt == tests-results.txt
+
+Testing [01;38;2;255;000;000m./cbase/generic.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_generic=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/generic_test ./cbase/generic.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+./cbase/generic.c:444 main():[[0;32mvoid*64[0m]var_voidptr = (nil) 
+./cbase/generic.c:445 main():[[0;32mchar*64[0m]var_string = [0;31m"a nice string"[0m 
+./cbase/generic.c:446 main():[[0;32mchar*64[0m]var_buffer = [0;31m"a nice buffer"[0m 
+./cbase/generic.c:447 main():[[0;32mbool8[0m]var_bool = 1 
+./cbase/generic.c:448 main():[[0;32mchar8[0m]var_char = [0;33m'c'[0m 
+./cbase/generic.c:449 main():[[0;32mschar8[0m]var_int8 = 127 
+./cbase/generic.c:450 main():[[0;32mshort16[0m]var_int16 = 32767 
+[[0;32mint32[0m]var_int32 = 2147483647 ./cbase/generic.c:452 main():[[0;32mint32[0m]var_int = 2147483647 
+./cbase/generic.c:453 main():[[0;32mllong64[0m]var_int64 = 9223372036854775807 
+./cbase/generic.c:454 main():[[0;32muchar8[0m]var_uint8 = 255 
+./cbase/generic.c:455 main():[[0;32mushort16[0m]var_uint16 = 65535 
+./cbase/generic.c:456 main():[[0;32muint32[0m]var_uint32 = 4294967295 
+./cbase/generic.c:457 main():[[0;32muint32[0m]var_uint = 4294967295 
+./cbase/generic.c:458 main():[[0;32mullong64[0m]var_uint64 = 18446744073709551615 
+./cbase/generic.c:459 main():[[0;32mfloat32[0m]var_float = 340282346638528859811704183484516925440.000000 
+./cbase/generic.c:460 main():[[0;32mdouble64[0m]var_double = 179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368.000000 
+./cbase/generic.c:462 main():[[0;32mchar8[0m]*var_string = [0;33m'a'[0m 
+./cbase/generic.c:463 main():[[0;32muint32[0m]var_uint - (uint)var_int = 2147483648 
+print a=[0;31mi[0m  able
+c=[0;31m1[0m 
+PRINTING a=a=[0;31mi[0m ; b=b=[0;31mable[0m 
+
+Testing [01;38;2;255;000;000m./cbase/hash.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_hash=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/hash_test ./cbase/hash.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+Arena 0x7faa02a00000 {
+  name: strings_map->arena_keys
+  begin: 0x7faa02a00030
+  pos: 0x7faa02a00070
+  size: 2097152
+  npushed: 3
+  next:    (nil)
+}
+
+time elapsed ./cbase/hash.c:963:insertion with resizes
+0.0723368s = 7.23368us per item.
+
+Testing [01;38;2;255;000;000m./cbase/memory.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_memory=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/memory_test ./cbase/memory.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+--- Starting Comprehensive Memory Tests ---
+malloc2(256) successful.
+Memory correctly initialized with debug byte.
+free2(256) successful.
+realloc2 (grow) preserved data.
+realloc2 (shrink) successful.
+realloc_flex (grow) preserved data.
+realloc_flex (shrink) successful.
+xstrdup successful.
+xmemdup successful.
+
+--- Starting High-Volume Stress Tests ---
+High-volume tracking and validation successful.
+Starting High-Volume Variable String Stress Tests.
+High-volume variable string tests successful.
+memory.c:1074 main():Error: freeing untracked pointer 0xdeadbeef.
+memory.c:1083 main():Allocation size mismatch: Expected 64, got 65.
+memory.c:1080 main():Memory was allocated here. (reallocated = 0)
+memory.c:1094 main():Double free (size = 16).
+memory.c:1091 main():Freed here. (size = 16).
+memory.c:1105 main():Reallocation old size does not match size allocated on ./cbase/memory.c:1101: main(): 80 != 120
+memory.c:1118 main():Reallocation old size does not match size allocated on ./cbase/memory.c:1113: main(): 48 != 64
+memory.c:1128 main():Tried to reallocate invalid pointer: 0xbaadf00d.
+memory.c:1091 main():Memory underflow detected (size 16).
+memory.c:1091 main():Memory underflow detected (size 16).
+memory.c:1156 main():Memory underflow detected during free.
+memory.c:1156 main():Memory overflow detected during free.
+memory.c:1091 main():Memory underflow detected (size 16).
+
+--- Starting Failure Case Tests ---
+
+All memory tests passed.
+
+Testing [01;38;2;255;000;000m./cbase/minmax.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_minmax=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/minmax_test ./cbase/minmax.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/numtostr.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_numtostr=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/numtostr_test ./cbase/numtostr.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/ryu.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_ryu=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/ryu_test ./cbase/ryu.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/sort.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_sort=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/sort_test ./cbase/sort.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+n_sub[P - 1] = 31
+n_sub[P - 1] = 16
+n_sub[P - 1] = 11
+n_sub[P - 1] = 10
+n_sub[P - 1] = 32
+n_sub[P - 1] = 16
+n_sub[P - 1] = 12
+n_sub[P - 1] = 4
+n_sub[P - 1] = 33
+n_sub[P - 1] = 17
+n_sub[P - 1] = 11
+n_sub[P - 1] = 5
+n_sub[P - 1] = 50
+n_sub[P - 1] = 25
+n_sub[P - 1] = 18
+n_sub[P - 1] = 8
+
+Testing [01;38;2;255;000;000m./cbase/string.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_string=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/string_test ./cbase/string.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/strtonum.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_strtonum=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/strtonum_test ./cbase/strtonum.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/threads.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_threads=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/threads_test ./cbase/threads.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/time.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_time=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/time_test ./cbase/time.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+
+time elapsed ./cbase/time.c:382:main
+4.7261e-05s = 47.261us per item.
+
+Testing [01;38;2;255;000;000m./cbase/utf8.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_utf8=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/utf8_test ./cbase/utf8.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"Ƌ񵎎J󆃔"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"ˌbO搯񶱨𹺁⹑񼼘!꛰핵񢀰򽽚覎Ӱ󏹙ꙧՐ/у멷ǙӒ򜂃ȜᕶJE񉿏󦈹𢣓󷤌󌰒󭕸Z\򸝮񗗜𒩴мdίذ6v;6^焚jm񾦵󜞗:𲏣ڂޛ𛮑춲󮔫h🦆X˚Î뮣󫤞❩5򭴲P𡥎楙X}糧Y&̎󾽵󏚉쿏౩׼줃݆"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"Jȹ񸗜փּ򏆃>P֜Հ嫦溧얷܆󲒷˂ʏD?废󢌦񞱿򰒕琗Ľa9󶳛ꜽ𮢾슦٪篝fî𭌱ż哔ᤡWԢ쫔񐾾Nײשغƪ򀴰ȼ屧򶼸᪮񞿗礭̤ʔ􊯃񊠚򚯄줴񆥪뎶䧻ߊ"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"쳧ƈy󗟷ڞ!񻽅܉ʟ񐽫鸿ǹ󀲺󄟋zퟻ񗗹𲌳񄃺𹢢󻣕󕅴󆦘򅓮Ҁ㑛꯽㭟æj⡭"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"󬆲񗣊]Mʴ򔛭諳܌󴠄񅺜ִ򃠞𜮡񺧘Ď#n=򘻵į虧󻰖ي6I٣҇󗏁嵜𞝷`7٥ۜ)񒦿⥽譵ڐ᛽Վwؤ𦶙璬џʿښ脎櫯ᶉ󨗢-񩜷ܻې⃷󵥪"袨۱󖎸1̋N"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"ާ誮Krퟍ󫅕ױ6֚񍶚ܑ婴梾퉣򏲘񲻢󱱒𖮓ō󙹛ػ񮫜Ȧ䦑򸪾󪊐𜸿Ҭ𦀓򡳃5.󜵁Y񟂢𸍦񱴦쎛ݣŖ򓋸ۖOJ(ǫ넇󟝮R묋=٣遀яᩱ␟克񆐊󽈗Ҿ1"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"򇗬Œzӝ-lϼRύӤ󳅛񛚮򷪢񮽽9隦m򣩰趄߈x򣼇X㰖퇝◃̂񐇮蒺꼃𩄛񞯥HrΞ򱋾鋹ٌ𝩔ڸ^힆֮򔋌񦨣񴅪ꎡ§𸂄䢷ףңﶽv򁐟ɴM]ㅊ󸕧첯񫌫`gg窖񇞬x]UdF򴫞涄|帆ߋ񰛻f騽纾̦骡԰ ~Å⺪򊱪֔胓ᨆq֩񣄾뭨𞙏"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"߬翘񻝕󸧞آb¨Б̩򂮖?Yɥ߶#$Q򯞫ॖ񒧆񊲗㣫ފ赑Ǳ𽌓𠋫Z܏ψʤ󝾬"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"䮓𸸤|󺍡<򯒃V͞񜤋ӯɪ󄙲1򪣍▸f>򴅦𮡛묎㭦炕󸦌Ⳝ󀑷񱣿ߺW죱骁ϓ񨗽Ճ򪲡"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"۔x񯣓텧ᷦ`Ѿ􏜴ݑ񝬏&򵈛=e볔򚿂ͷ𭄜?"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"ꁅ񟿗󹱎暆󘣜׎΅x󢺊̠􈰎򢹑򘘋ꢶ葉򄑗ň癿׸}𨦐򰵿㓽\ʕ淽𴟪Q򇠷陖򶮙彸幹(֋ﺬدɕ󉿲뿢Y󯸺󚇚jn񅔖䶬󧢷􅕄ʌ󺊴C٠憭ἠ`yE⩎┋멞½ރ诱󦻞]ϯ+縉򎃺jH$򺨸򱮪򤃁𖛳䲘􂝎ǅVt􊌀"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"񊜇𶷉N𨐗ڶ󮮳򒿿郍&<⭻1󈄍Qɬ^̯ä5͡F񔂛𫈤_=죷ى񡛲s򁃼򤏠O+Mů󆟛򪥈%액"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"ٛͫU򮍁󢊄򡰀;𜄺󘞣艮چ򫊢SΥm^ꚇꚿA(w旡򢷯⡻͆Ҡ՟䈝뎉Ͱ򶤁򗇯W񩓉E𬈝𫧆<_N?󄶄l׫3䓞~憥ўhՠ𫼿a}Ӡߕֽ슱"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"鈵𜪽ڏW𫘯Ή_ﱩ<Ѥ靃립𾍤򜺟󱸯㡴#߻\Ɍ䋃􏿃ɱ틔𧺧䏿5񮓙"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"尛𿱱ɽ𧑭UȭٙO>jwL𕫲֍w󍛀燧펑*㖂ʷ멾ڹwү󈎽с󑏼:灴͇mͺǡ莹뙭蓆ỏȢ񾭌"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"熁󓸎ϳꒇܩ򭟃ÜǈRī񻅮@٘񫥷˷铱􆼗򴃀䝻𘎷#)'ߘi󺳻奄ϰ)뼄ᓒ繮󥾁􄁺f⽢׉⾟"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"&󓙨񱟶NI⹨K򔧼K㴦%AaLs蚧˳ᧇ񲊽\򨺋⭓㔼֊겵󢯶󾃀򢜄֒뎝S򑍴ÿ"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"񉓑"괄􍽇1魁"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"Ӱ|䨯䷱ܯ῱􂠦ɼֿ񌊙߇ɥ쬔˧뀃򤰫򐟘͠􇻩􍽮Z❩pŨ㤗򧚏ם񂑼𓥥O􀠙΀ؕj󚯡麀Xȭت̓ɓ⼜͟ɡ񘂇❫吰Ӧ;󡃲𐏁񴐬󔢾߱c$񓎀𰇈򵛦ҙ򀈷9̩зۃM򀗮莡֙ۄTބ:󤍕AĠ쟑 򞒉򢞵ʹ᝛ὤퟪ봂򖕈ԏѰ踵"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"𤚾g􂀡ᐢ񄐁򜳤󥑦范ǺJ薞ۊA烣ّ𐎱ו(҅ގÙ񊌦Ȍ𐉮xؕi泝Ԯ&Ãbjm龦̪󠜃󮤨ߘ=蓵贅Ꮄ@뗐ܤCք"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"񫉸𧰒뮇]𶯑廓󧀿򦓮鞁⬎쀿򍗭愾輓ْ𛧁S%񸆆"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"LԪh䂌򻸖𢼂𞭓朎őUʹ񞌫쀼RL뀇Ǘ(򖵵̨Ǯ󂖴:ӽོ͊ߑe"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"㻖򜖁𰦪Ԥ,k𵭒틛.譾떇捚l<ߏ󡥼ު'⒜䋔s򨶋"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"򅑺ޮת󛱶𾼬m־ڜ񸯧讳f򁟪1ۥ蛫Ӌㄮ߷ꗊ+ζϘ©ɺ¾бȻ묠̒霯e򗰍Ѿґ󺐙𶖊;ⱈ缺까󐻥􌈬׻粨И𓥩#Ԛ߾Ô磽U򅩦ͪ𱧟Ml˾酵񐏏乏䶒칟פζпȅﱰ󧍰V󂧣䆛C𙘕qt񐖟ćĲƢ􄋾`⇔䥝᪒燀&08∻tq $ɴ㑔n)ӸB垿햾N׃뛧"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"𞁋Ow𥵘@ʉF󽦃􍋷􉧵ŒݗXß򎤲f훜Xľ񊟓Лҟ򉑁򷎬ĚڙÈ桻ౠ鲉𢵓/Ǖ꧊ص𷌔᱕竨ݡ񳴐󀴺瘁򧡞椤숿Ǣ^ⅲ垹D򧧽սޝӶ󑝂񵽀iʐꦑkօ訉DQݵʳ넌՟񀩛<$򦤟à﹵僬𽾒^󵹟ғꋈǴ鰂ұ𐻺魈⮻򏄔񱭠ܓюҫ"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"靖ٺƜ󈂮wO򸳤󁠹𶱕Ӻi񟑉وๅΠ󰻱9Թi~䰾発򲧁񛊡ࡠ񄺨輮~򢝣ݗ혱Ċ菦|<ǎ"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"ٝ퉹ੱċÂ޻Dڽ􈇠-𧦫ѹ擋m򕷔"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"픁ׁ񡆼񍃝݀&bs뺘岊ȵá⊐ژ˕&7S۶к!Ykϐ񄏋ˮ丠ih󱊗᠂嘞鉘1{񅟸󒇬畮Уuؤ󫉿⊓󹋦*򴊪󣳥문٧-󦩦𛽢藒唼η𥬙"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"惢lbҺ𘪹۔亀2Ā풺ղ֩H⃅W8ޯޣ񑾎e<䯁+𞚁𨤖Fְ物堻ሐȽ򭔰"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"aҍ)u㟋ᣂdⓕS򋖰Uց穨󯃓ګˀ:ӂ᭼􋻻ǚ򅳥؏򗬉琙b>`򇠄ӏ[⁩𭧑𳩡ΆTh񄈋೶񢪓R퇋g񳷋𻂮󋀪MȘ𽖚򣔺񶢩엡;ɚچ8ɛʆΟА𷞰𼱻𿧥Ӓ䉗<ט愞n8ŐV𺃦"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"披󦱶ٗм쏤󪦗3꒙ΗβS甔騣󾍦V򖞺g+἗󵁙Ø讧7ݺ`6𭢁ꘌآවʙJ`󢇓ܬʹ򾽅鿩򢠖Y檖򣤮ﲻ{骣3報⬛晣򂊠𼵆ԎHݹ㩠*ţِ󲟤񱵴b㞵Ո𭢍ᄅ򏢋񧎓b񠈩"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"󷈚m񐉬g빎剺࠘؊<8񜄱pq㕍輫߆﵏򉞕񎮬Vy𗴔J󸟵Ԉ{χ򈒀5꫆맳򮜑᳌㫕񙄙℃􁞺驇"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"ŖÑ!ҕ𵢈푫U㾦LƱ؞ʬ񀸯핪􎺍􉱨黠𸲓򫴥Ɏsٮ󉢶򪣏ل∨յt󃴶٨ǀΝ𱭌¦P元㵺ȭM{詀Þ닰򠄎􁽭H񏶡1񾎵z互钍"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"񩴙ᡜꯀ񮬫򂝠󷊈𙅐𭚺C߉󟥤Ռד[ٹ󩘁񛕋_៪v쏡􏬌趺<&.񱵋ĵ<᪹h앴񖝟𻼤󰟶⏞2酖񑬈⊏ٶïv񘏪𗎶H\<Ґ񠵿򭛝ȫ򹖖󲫔ƾ󸏵ҵ`;朸ݮѢq섟2🉂Ʊ돐󷯡B䦒ޠ𵌾oBϐž׳"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"(}ܢ𝤥荶׻6n᲋𒽆KＱ̈́nɏ:𒥏󧀪⸋J򺶔!񍎵,9\񽢠ѝ򶼺䰣鱥𾑮ﺪ/®󶇪򒛲m񑙨炈䏽胜Ar񣭳Ȍ,ڃ鲢𘇜񕢎ʖ䇒ꜚ贜轊؏򓝾0򁨙ë恵16ӝPˌय़ҤߊT񬰱߿"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"覌豟Պ􎇍졍鱝Dᬇ򆚡𹙑ڦ2܌欱煠Ϋ~q򭩞h훽Ǯ쮡쁴VD깜ﮃ〴˓߈⓺r'ΛY򈐚拕͘񪑂s旰󆺟9,ˊ踴񟺳$񂀐ɭ񱪺i9򺦽𑯛ǻ񦨸|൩쪢򘶨ý񐈳23e𠞼"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"ɊoӠКQ񭻳򪣝䝃򫿚؏Ǎ]밵񋛓&𺘃󪋆󖦍N艼𝇁ـ蜏I굘ϫA|麁{"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"䗻ʤ󭬥󦛦öȥ蜿3rЈ🴾Ǽǰ기Ԟ޻E𸗽ˬ+̰wԛൊX嫈AD՗睮ѧڪ𖹘󶖗䑢񊣥XŬ򠪹拌^򐷪잇Ҍ蛗Ą㐮ƴt쫩ܡGތ틒ļ܄􍯐󼰚诏Ⴚ𤜹б񢒞7ʟ𒅙󍱀𘼞⾇"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"򏲀끵ԋӌzh񕫅򽏇ィ񦂔TcUkԔ򚵠ʹ񳆮ޭ؄Dե衭񜛡շ爳􋉍𾩩򾎣݌լK򽯃檠4U{㢭򶐫뫂O􁪹u襖ϝӨ葞I䪰"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"᭎ⴴߘﲗѽR4ᇀÞᾴ⩞"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"聻󭻥yꕕΦ⥔S̟Ć𐳯󰨋䡶؀T񀂔뒝𡪢􊌗ۺԡ⦰ٗ߂񤗮澅߀ߨ鳯Њh񶥋˚tq8qᩭf"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"u󪵰򵗟֠φ/ߝ=򰜓򇌀ح\䭺ĳ'ⶲ𛻼ๆ贗ĥ􇂸c+"锘χ􅺾ꗸJ랐˝ۜ䨟򸥛佶Šhᮆ񹒼󋱍C>律"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m">񓹏𲊪֗_￻뻖󃐑>򟖞ȵśӮÉ񻘁b򈦸|󃥃󥞃S괐㚿󺵃񔕏^z$뢠y򺷰Ah˕ʨ3cꬷጳa燮Ϧ򗵖yÅ񕿢Kﰄ񠡲񆽚Ͷfʗըh񇎕1eїԴќAӨК۲ŉ%W򏒏񇷧񀒸񣄤𠖮׮𔦮êo𭸭̈拌ਦ"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"𽘸酛Ut肾$觽(Ӕ򯳀򰚃􅶙ԧ񸫬/䫻򓙴閚ن֡󐌍a񈑛0뻫𫥰3񂬵]圎F򒨇뀵꒢򷻔6ัﻷԷfǵK嵚̈́⫐.󋰃ׁɝ𢄐񺑩辠񋦽ѹG򶚉𨂦䎳S𷩤"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"̏sզ(𿥏넚܅碰Bȉހދͺ쑄釶}ƅ򩹔8񄤒ҋTﴆ󩣰ض_П겋㬿ب񀉙䈉򡔣焩񨴗ﮭJY񦾚㍹𜘭𡩰)ʄ㿥򺯠討뿚,󵁕줙촩߾؟߮ϯt󵒎1֕&󧐊矀xy蜫ݔw꧐򓞾y̔J%餅)냠H􌾎򭇾񶨧ت͈YW؋󞛦"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"󌢎󗶤󊄮ԟQ򱸨ژ够嚵>цv곿淘бˁ%񐢐ߺ|֛쭡E$׎ƏPd渊Sᥖܼëǽےػ򨜦ߠ뷼餅􅧨"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"΁lٿꭣ콆'Ȣ𧵥󬌟w-أiʂ烖 񖇀󣂵QĞᶟֈᏸםÙ󓨓'䶁ҪᏜࣨD4e֔򽅌ݨ߄Ǯ򃞧Ք妧잂䀀򔟨맾񩬉Ưr񖮭𯿼雲󶙤ϟ↏³ࠬɎϿ'{-Դ𣷒v汘𳿏mΜ򋡻ۃ򣛚ڍػ񳲱jqi𹣓Ѫeۉ/򬞧ꚾőHXڿ󪬚󿠽襵S㸲ש𙆯緧s爈"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"⸙􋄆浦򒙙O柇f줏g滇ѱ圊Ĝ$ǧ򅾌ñ8᱉#ӉȞǲ𢥚ɫϡI󇮳舄󌳍۾沖(v⌦Ǧϡ򙨳"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"٦r󉢝[❜􏃬ٮஆ쭼p쌱Ļ>됺򫲀󅘕+ͨ𘧌L#`󁕿짻Ґ񝸆𧨁򾈘ή𴡞,[舲𦝡񁃴^ϟ뉥ěࠏmZý㙳ƭ𾈄犎˻񙉭߮ꠉȨہ饹0㓏ژ(ݹk궂𼆪ؚT㚺옼ꢦԧ"[0m 
+./cbase/utf8.c:639 main():[[0;32mchar*64[0m]test_buf = [0;31m"󨦏ޠƢ󰳡&௤皛ٰ򴘦ׅsVݏ򜓗нÆ𳒖j񊪅"[0m 
+utf8_random_string validation successful.
+
+Testing [01;38;2;255;000;000m./cbase/util.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_util=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/util_test ./cbase/util.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+enum[2] = WEEK_DAY_MONDAY
+enum[3] = WEEK_DAY_TUESDAY
+enum[4] = WEEK_DAY_WEDNESDAY
+enum[5] = WEEK_DAY_THURSDAY
+enum[6] = WEEK_DAY_FRIDAY
+enum[7] = WEEK_DAY_SATURDAY
+
+enum[0] = NONE
+enum[1] = POWER_OF2_ONE
+enum[2] = POWER_OF2_TWO
+enum[3] = POWER_OF2_ONE|POWER_OF2_TWO
+enum[4] = POWER_OF2_FOUR
+enum[5] = POWER_OF2_ONE|POWER_OF2_FOUR
+enum[6] = POWER_OF2_TWO|POWER_OF2_FOUR
+enum[7] = POWER_OF2_ONE|POWER_OF2_TWO|POWER_OF2_FOUR
+enum[8] = POWER_OF2_EIGHT
+enum[9] = POWER_OF2_ONE|POWER_OF2_EIGHT
+enum[10] = POWER_OF2_TWO|POWER_OF2_EIGHT
+enum[11] = POWER_OF2_ONE|POWER_OF2_TWO|POWER_OF2_EIGHT
+enum[12] = POWER_OF2_FOUR|POWER_OF2_EIGHT
+enum[13] = POWER_OF2_ONE|POWER_OF2_FOUR|POWER_OF2_EIGHT
+enum[14] = POWER_OF2_TWO|POWER_OF2_FOUR|POWER_OF2_EIGHT
+enum[15] = POWER_OF2_ONE|POWER_OF2_TWO|POWER_OF2_FOUR|POWER_OF2_EIGHT
+./cbase/util.c:1269:main: called 1 times
+enum[16] = POWER_OF2_SIXTEEN
+at the end, both are:
+ this is string is awesome: 5
+this is string pointer is awesome: 5
+ == this is string is awesome: 5
+this is string pointer is awesome: 5
+str flex also is: a flexible one.
+
+Testing [01;38;2;255;000;000m./cbase/windows.c[0m ...
++ zig cc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -target x86_64-windows-gnu -DTESTING_windows=1 -DTESTING=1 -o /tmp/windows_test ./cbase/windows.c
++ compiled=0
+
+Testing [01;38;2;255;000;000m./cbase/xenums.c[0m ...
++ tcc -I. -Icbase -DGETTEXT_PACKAGE=measure -DLOCALEDIR=/usr/local/share/locale -pthread -std=c11 -Wfatal-errors -g3 -DDEBUGGING=1 -DTESTING_xenums=1 -DTESTING=1 -DCBASE_SEPARATE_COMPILATION=1 -o /tmp/xenums_test ./cbase/xenums.c bin/obj/test-cbase/tcc/libcbase.a -lm
++ compiled=0
+xenums.c: All tests passed successfully.

@@ -62,7 +62,8 @@ bool assert_not_equal_4(char *, int32, char *,
                         char *, char *, char *, int32, char *, int32);
 
 enum AssertCompareValueKind {
-    ASSERT_COMPARE_VALUE_INVALID,
+    ASSERT_COMPARE_VALUE_UNSIGNED,
+    ASSERT_COMPARE_VALUE_FLOAT,
     ASSERT_COMPARE_VALUE_POINTER,
     ASSERT_COMPARE_VALUE_STRING,
     ASSERT_COMPARE_VALUE_BOOL,
@@ -86,28 +87,16 @@ typedef struct AssertCompareValue {
         char *string;
         bool boolean;
         llong integer;
+        ullong unsigned_integer;
+        float afloat;
         double adouble;
     };
 } AssertCompareValue;
 
-AssertCompareValue assert_compare_value_pointer(char *, int32, char *,
-                                                char *, void *);
-AssertCompareValue assert_compare_value_string(char *, int32, char *,
-                                               char *, char *);
-AssertCompareValue assert_compare_value_bool(char *, int32, char *,
-                                             char *, bool);
-AssertCompareValue assert_compare_value_signed(char *, int32, char *,
-                                               char *, llong);
-AssertCompareValue assert_compare_value_unsigned(char *, int32, char *,
-                                                 char *, ullong);
-AssertCompareValue assert_compare_value_float(char *, int32, char *,
-                                              char *, float);
-AssertCompareValue assert_compare_value_double(char *, int32, char *,
-                                               char *, double);
-bool assert_compare_const(char *, int32, char *,
-                          enum AssertCompareMode,
-                          char *, char *,
-                          AssertCompareValue, AssertCompareValue);
+bool assert_compare_strings(enum AssertCompareMode, char *, char *);
+void assert_compare_failure(char *, int32, char *, enum AssertCompareMode,
+                            char *, char *, AssertCompareValue,
+                            AssertCompareValue);
 
 #define ASSERT_DECLARE_STRINGS(MODE)                         \
 bool a_strings_##MODE(char *, int32, char *,                 \
@@ -240,9 +229,6 @@ bool UNSUPPORTED_TYPE_FOR_GENERIC_A_FIRST_BOOL(void);
 bool UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_COMPARE_CHARP(void);
 bool UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_COMPARE_VOIDP(void);
 bool UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_COMPARE(void);
-void UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_COMPARE_CONST(void);
-bool UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_CLOSE_FIRST(void);
-bool UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_CLOSE_SECOND(void);
 
 #define ASSERT_TRAP_IF_FALSE(EXPR) do {                            \
     if (!(EXPR)) {                                                 \
@@ -535,39 +521,160 @@ _Generic((VAR2),                                                             \
 #endif
 
 #if CHAR_MIN < 0
-#define ASSERT_COMPARE_VALUE_CHAR assert_compare_value_signed
+#define ASSERT_COMPARE_CHAR_KIND ASSERT_COMPARE_VALUE_INTEGER
+#define ASSERT_COMPARE_CHAR_MEMBER integer
 #else
-#define ASSERT_COMPARE_VALUE_CHAR assert_compare_value_unsigned
+#define ASSERT_COMPARE_CHAR_KIND ASSERT_COMPARE_VALUE_UNSIGNED
+#define ASSERT_COMPARE_CHAR_MEMBER unsigned_integer
 #endif
 
-#define ASSERT_COMPARE_VALUE(VAR)                                            \
-  _Generic((VAR),                                                            \
-    void *: assert_compare_value_pointer,                                    \
-    char *: assert_compare_value_string,                                     \
-    bool:   assert_compare_value_bool,                                       \
-    char:   ASSERT_COMPARE_VALUE_CHAR,                                       \
-    schar:  assert_compare_value_signed,                                     \
-    short:  assert_compare_value_signed,                                     \
-    int:    assert_compare_value_signed,                                     \
-    long:   assert_compare_value_signed,                                     \
-    llong:  assert_compare_value_signed,                                     \
-    uchar:  assert_compare_value_unsigned,                                   \
-    ushort: assert_compare_value_unsigned,                                   \
-    uint:   assert_compare_value_unsigned,                                   \
-    ulong:  assert_compare_value_unsigned,                                   \
-    ullong: assert_compare_value_unsigned,                                   \
-    float:  assert_compare_value_float,                                      \
-    double: assert_compare_value_double,                                     \
-    default: UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_COMPARE_CONST               \
-  )(__FILE__, __LINE__, FUNC__,                                              \
-    #VAR, (VAR))
+// Keep the two generic selections independent, not nested. The first selects
+// the kind and the second selects the storage lvalue without evaluating VAR.
+#define ASSERT_COMPARE_KIND(VAR)                                              \
+    _Generic((VAR),                                                           \
+        void *: ASSERT_COMPARE_VALUE_POINTER,                                 \
+        char *: ASSERT_COMPARE_VALUE_STRING,                                  \
+        bool: ASSERT_COMPARE_VALUE_BOOL,                                      \
+        char: ASSERT_COMPARE_CHAR_KIND,                                       \
+        schar: ASSERT_COMPARE_VALUE_INTEGER,                                  \
+        short: ASSERT_COMPARE_VALUE_INTEGER,                                  \
+        int: ASSERT_COMPARE_VALUE_INTEGER,                                    \
+        long: ASSERT_COMPARE_VALUE_INTEGER,                                   \
+        llong: ASSERT_COMPARE_VALUE_INTEGER,                                  \
+        uchar: ASSERT_COMPARE_VALUE_UNSIGNED,                                 \
+        ushort: ASSERT_COMPARE_VALUE_UNSIGNED,                                \
+        uint: ASSERT_COMPARE_VALUE_UNSIGNED,                                  \
+        ulong: ASSERT_COMPARE_VALUE_UNSIGNED,                                 \
+        ullong: ASSERT_COMPARE_VALUE_UNSIGNED,                                \
+        float: ASSERT_COMPARE_VALUE_FLOAT,                                    \
+        double: ASSERT_COMPARE_VALUE_DOUBLE)
 
-#define ASSERT_COMPARE_NORMALIZED(MODE, VAR1, VAR2) ASSERT_TRAP_IF_FALSE(      \
-  assert_compare_const(__FILE__, __LINE__, FUNC__,                             \
-                       ASSERT_COMPARE_MODE_##MODE,                             \
-                       #VAR1, #VAR2,                                           \
-                       ASSERT_COMPARE_VALUE(VAR1),                             \
-                       ASSERT_COMPARE_VALUE(VAR2)))
+#define ASSERT_COMPARE_MEMBER(VALUE, VAR)                                     \
+    _Generic((VAR),                                                           \
+        void *: (VALUE).pointer,                                              \
+        char *: (VALUE).string,                                               \
+        bool: (VALUE).boolean,                                                \
+        char: (VALUE).ASSERT_COMPARE_CHAR_MEMBER,                             \
+        schar: (VALUE).integer,                                               \
+        short: (VALUE).integer,                                               \
+        int: (VALUE).integer,                                                 \
+        long: (VALUE).integer,                                                \
+        llong: (VALUE).integer,                                               \
+        uchar: (VALUE).unsigned_integer,                                      \
+        ushort: (VALUE).unsigned_integer,                                     \
+        uint: (VALUE).unsigned_integer,                                       \
+        ulong: (VALUE).unsigned_integer,                                      \
+        ullong: (VALUE).unsigned_integer,                                     \
+        float: (VALUE).afloat,                                                \
+        double: (VALUE).adouble)
+
+#define ASSERT_COMPARE_KIND_IS(KIND, NAME)                                    \
+    ((enum AssertCompareValueKind)(KIND) == ASSERT_COMPARE_VALUE_##NAME)
+
+#define ASSERT_COMPARE_NORMAL_KIND(KIND)                                      \
+    (ASSERT_COMPARE_KIND_IS(KIND, UNSIGNED) ? ASSERT_COMPARE_VALUE_INTEGER    \
+     : ASSERT_COMPARE_KIND_IS(KIND, FLOAT) ? ASSERT_COMPARE_VALUE_DOUBLE      \
+     : (enum AssertCompareValueKind)(KIND))
+
+#define ASSERT_COMPARE_NORMALIZE(VALUE, VAR, RAW_KIND, KIND) do {             \
+    (VALUE).kind = (enum AssertCompareValueKind)(KIND);                       \
+    ASSERT_COMPARE_MEMBER(VALUE, VAR) = (VAR);                                \
+    if (ASSERT_COMPARE_KIND_IS(RAW_KIND, UNSIGNED)) {                         \
+        if ((VALUE).unsigned_integer > LLONG_MAX) {                           \
+            if (DEBUGGING) {                                                  \
+                assert_error(__FILE__, __LINE__, FUNC__,                      \
+                             "%s = %llu is larger than LLONG_MAX\n",          \
+                             #VAR, (VALUE).unsigned_integer);                 \
+            }                                                                 \
+            ASSERT_TRAP_IF_FALSE(false);                                      \
+        }                                                                     \
+        (VALUE).integer = (llong)(VALUE).unsigned_integer;                    \
+    } else if (ASSERT_COMPARE_KIND_IS(RAW_KIND, FLOAT)) {                     \
+        (VALUE).adouble = (double)(VALUE).afloat;                             \
+    }                                                                         \
+} while (0)
+
+#define ASSERT_COMPARE_IS_NUMBER(KIND)                                        \
+    (ASSERT_COMPARE_KIND_IS(KIND, INTEGER)                                    \
+     || ASSERT_COMPARE_KIND_IS(KIND, DOUBLE))
+
+#define ASSERT_COMPARE_IS_POINTER(KIND)                                       \
+    (ASSERT_COMPARE_KIND_IS(KIND, POINTER)                                    \
+     || ASSERT_COMPARE_KIND_IS(KIND, STRING))
+
+#define ASSERT_COMPARE_AS_DOUBLE(VALUE, KIND)                                 \
+    (ASSERT_COMPARE_KIND_IS(KIND, INTEGER)                                    \
+     ? (double)(VALUE).integer : (VALUE).adouble)
+
+#define ASSERT_COMPARE_AS_POINTER(VALUE, KIND)                                \
+    (ASSERT_COMPARE_KIND_IS(KIND, STRING)                                     \
+     ? (void *)(VALUE).string : (VALUE).pointer)
+
+#define ASSERT_COMPARE_OP_LESS <
+#define ASSERT_COMPARE_OP_LESS_EQUAL <=
+#define ASSERT_COMPARE_OP_EQUAL ==
+#define ASSERT_COMPARE_OP_NOT_EQUAL !=
+#define ASSERT_COMPARE_OP_GREATER >
+#define ASSERT_COMPARE_OP_GREATER_EQUAL >=
+
+// The actual comparisons must remain visible at the assertion site so that
+// compilers and static analyzers can constrain the original operands.
+#define ASSERT_COMPARE_NORMALIZED(MODE, VAR1, VAR2) do {                      \
+    enum {                                                                    \
+        ASSERT_LEFT_RAW = ASSERT_COMPARE_KIND(VAR1),                          \
+        ASSERT_RIGHT_RAW = ASSERT_COMPARE_KIND(VAR2),                         \
+        ASSERT_LEFT_KIND = ASSERT_COMPARE_NORMAL_KIND(ASSERT_LEFT_RAW),       \
+        ASSERT_RIGHT_KIND = ASSERT_COMPARE_NORMAL_KIND(ASSERT_RIGHT_RAW),     \
+    };                                                                        \
+    AssertCompareValue ASSERT_LEFT;                                           \
+    AssertCompareValue ASSERT_RIGHT;                                          \
+    bool ASSERT_MATCH;                                                        \
+    ASSERT_COMPARE_NORMALIZE(ASSERT_LEFT, VAR1,                               \
+                             ASSERT_LEFT_RAW, ASSERT_LEFT_KIND);              \
+    ASSERT_COMPARE_NORMALIZE(ASSERT_RIGHT, VAR2,                              \
+                             ASSERT_RIGHT_RAW, ASSERT_RIGHT_KIND);            \
+    if (ASSERT_COMPARE_KIND_IS(ASSERT_LEFT_KIND, INTEGER)                     \
+        && ASSERT_COMPARE_KIND_IS(ASSERT_RIGHT_KIND, INTEGER)) {              \
+        ASSERT_MATCH = ASSERT_LEFT.integer ASSERT_COMPARE_OP_##MODE           \
+                       ASSERT_RIGHT.integer;                                  \
+    } else if (ASSERT_COMPARE_IS_NUMBER(ASSERT_LEFT_KIND)                     \
+               && ASSERT_COMPARE_IS_NUMBER(ASSERT_RIGHT_KIND)) {              \
+        ASSERT_MATCH = ASSERT_COMPARE_AS_DOUBLE(ASSERT_LEFT, ASSERT_LEFT_KIND)\
+                       ASSERT_COMPARE_OP_##MODE                               \
+                       ASSERT_COMPARE_AS_DOUBLE(ASSERT_RIGHT,                 \
+                                                ASSERT_RIGHT_KIND);           \
+    } else if (ASSERT_COMPARE_KIND_IS(ASSERT_LEFT_KIND, STRING)               \
+               && ASSERT_COMPARE_KIND_IS(ASSERT_RIGHT_KIND, STRING)) {        \
+        ASSERT_MATCH = assert_compare_strings(ASSERT_COMPARE_MODE_##MODE,     \
+                                              ASSERT_LEFT.string,             \
+                                              ASSERT_RIGHT.string);           \
+    } else if (ASSERT_COMPARE_IS_POINTER(ASSERT_LEFT_KIND)                    \
+               && ASSERT_COMPARE_IS_POINTER(ASSERT_RIGHT_KIND)) {             \
+        ASSERT_MATCH = (uintptr)ASSERT_COMPARE_AS_POINTER(ASSERT_LEFT,        \
+                                                          ASSERT_LEFT_KIND)   \
+                       ASSERT_COMPARE_OP_##MODE                               \
+                       (uintptr)ASSERT_COMPARE_AS_POINTER(ASSERT_RIGHT,       \
+                                                          ASSERT_RIGHT_KIND); \
+    } else if (ASSERT_COMPARE_KIND_IS(ASSERT_LEFT_KIND, BOOL)                 \
+               && ASSERT_COMPARE_KIND_IS(ASSERT_RIGHT_KIND, BOOL)) {          \
+        ASSERT_MATCH = ((ASSERT_COMPARE_MODE_##MODE                           \
+                         == ASSERT_COMPARE_MODE_EQUAL)                        \
+                        || (ASSERT_COMPARE_MODE_##MODE                        \
+                            == ASSERT_COMPARE_MODE_NOT_EQUAL))                \
+                       && (ASSERT_LEFT.boolean ASSERT_COMPARE_OP_##MODE       \
+                           ASSERT_RIGHT.boolean);                             \
+    } else {                                                                  \
+        ASSERT_MATCH = false;                                                 \
+    }                                                                         \
+    if (!ASSERT_MATCH) {                                                      \
+        if (DEBUGGING) {                                                      \
+            assert_compare_failure(__FILE__, __LINE__, FUNC__,                \
+                                   ASSERT_COMPARE_MODE_##MODE, #VAR1, #VAR2,  \
+                                   ASSERT_LEFT, ASSERT_RIGHT);                \
+        }                                                                     \
+        ASSERT_TRAP_IF_FALSE(false);                                          \
+    }                                                                         \
+} while (0)
 
 #if GODBOLT
 #define ASSERT_COMPARE_CONST(MODE, VAR1, VAR2)                                 \
@@ -698,49 +805,30 @@ _Generic((VAR2),                                                             \
 #define ASSERT_NE(...)                                                         \
     SELECT_ON_NUM_ARGS(ASSERT_NE_CALL_, __VA_ARGS__)
 
-#define A_BOTH_DOUBLE_CLOSE(MODE, VAR1, VAR2, TYPE1, TYPE2)                    \
-    a_double_##MODE(__FILE__, __LINE__, FUNC__,                                \
-                    #VAR1, #VAR2,                                              \
-                    typename(TYPE1), typename(TYPE2),                          \
-                    typebits(TYPE1), typebits(TYPE2),                          \
-                    ASSERT_FP_KIND_EXPR(VAR1), ASSERT_FP_KIND_EXPR(VAR2),      \
-                    DOUBLE_GET(VAR1, TYPE1), DOUBLE_GET(VAR2, TYPE2))
+#define ASSERT_DOUBLE_CLOSE_TYPES(VAR1, VAR2)                                 \
+    _Static_assert(ASSERT_FP_KIND_EXPR(VAR1) != ASSERT_FP_KIND_NONE,          \
+                   "first closeness operand must be float or double");        \
+    _Static_assert(ASSERT_FP_KIND_EXPR(VAR2) != ASSERT_FP_KIND_NONE,          \
+                   "second closeness operand must be float or double")
 
-#define A_BOTH_DOUBLE_CLOSE_TOL(MODE, VAR1, VAR2, TOL, TYPE1, TYPE2)           \
-    a_double_##MODE(__FILE__, __LINE__, FUNC__,                                \
-                    #VAR1, #VAR2,                                              \
-                    typename(TYPE1), typename(TYPE2),                          \
-                    typebits(TYPE1), typebits(TYPE2),                          \
-                    DOUBLE_GET(VAR1, TYPE1), DOUBLE_GET(VAR2, TYPE2),          \
-                    (double)(TOL))
+#define ASSERT_DOUBLE_CLOSE_ULPS(MODE, VAR1, VAR2) do {                       \
+    ASSERT_DOUBLE_CLOSE_TYPES(VAR1, VAR2);                                    \
+    ASSERT_TRAP_IF_FALSE(                                                     \
+        a_double_##MODE(__FILE__, __LINE__, FUNC__, #VAR1, #VAR2,             \
+                        typename(TYPEID(VAR1)), typename(TYPEID(VAR2)),       \
+                        typebits(TYPEID(VAR1)), typebits(TYPEID(VAR2)),       \
+                        ASSERT_FP_KIND_EXPR(VAR1), ASSERT_FP_KIND_EXPR(VAR2), \
+                        (double)(VAR1), (double)(VAR2)));                     \
+} while (0)
 
-#define A_FIRST_DOUBLE_CLOSE(MODE, VAR1, VAR2, TYPE1)                          \
-_Generic((VAR2),                                                               \
-  float:  A_BOTH_DOUBLE_CLOSE(MODE, VAR1, VAR2, TYPE1, TYPE_FLOAT),            \
-  double: A_BOTH_DOUBLE_CLOSE(MODE, VAR1, VAR2, TYPE1, TYPE_DOUBLE),           \
-  default: UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_CLOSE_SECOND()                  \
-)
-
-#define A_FIRST_DOUBLE_CLOSE_TOL(MODE, VAR1, VAR2, TOL, TYPE1)                 \
-_Generic((VAR2),                                                               \
-  float:  A_BOTH_DOUBLE_CLOSE_TOL(MODE, VAR1, VAR2, TOL, TYPE1, TYPE_FLOAT),   \
-  double: A_BOTH_DOUBLE_CLOSE_TOL(MODE, VAR1, VAR2, TOL, TYPE1, TYPE_DOUBLE),  \
-  default: UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_CLOSE_SECOND()                  \
-)
-
-#define ASSERT_DOUBLE_CLOSE_ULPS(MODE, VAR1, VAR2) ASSERT_TRAP_IF_FALSE(       \
-    _Generic((VAR1),                                                           \
-      float:  A_FIRST_DOUBLE_CLOSE(MODE, VAR1, VAR2, TYPE_FLOAT),              \
-      double: A_FIRST_DOUBLE_CLOSE(MODE, VAR1, VAR2, TYPE_DOUBLE),             \
-      default: UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_CLOSE_FIRST()               \
-    ))
-
-#define ASSERT_DOUBLE_CLOSE_TOL(MODE, VAR1, VAR2, TOL) ASSERT_TRAP_IF_FALSE(   \
-    _Generic((VAR1),                                                           \
-      float:  A_FIRST_DOUBLE_CLOSE_TOL(MODE, VAR1, VAR2, TOL, TYPE_FLOAT),     \
-      double: A_FIRST_DOUBLE_CLOSE_TOL(MODE, VAR1, VAR2, TOL, TYPE_DOUBLE),    \
-      default: UNSUPPORTED_TYPE_FOR_GENERIC_ASSERT_CLOSE_FIRST()               \
-    ))
+#define ASSERT_DOUBLE_CLOSE_TOL(MODE, VAR1, VAR2, TOL) do {                   \
+    ASSERT_DOUBLE_CLOSE_TYPES(VAR1, VAR2);                                    \
+    ASSERT_TRAP_IF_FALSE(                                                     \
+        a_double_##MODE(__FILE__, __LINE__, FUNC__, #VAR1, #VAR2,             \
+                        typename(TYPEID(VAR1)), typename(TYPEID(VAR2)),       \
+                        typebits(TYPEID(VAR1)), typebits(TYPEID(VAR2)),       \
+                        (double)(VAR1), (double)(VAR2), (double)(TOL)));      \
+} while (0)
 
 #if CC_GCC || CC_CLANG
   #define ASSERT_CLOSE_2(VAR1, VAR2)                                           \

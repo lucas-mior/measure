@@ -80,109 +80,6 @@ assert_error(char *file, int32 line, char *func, char *format, ...) {
     return;
 }
 
-AssertCompareValue
-assert_compare_value_pointer(char *file, int32 line, char *func,
-                             char *name, void *value) {
-    AssertCompareValue result = {0};
-
-    (void)file;
-    (void)line;
-    (void)func;
-    (void)name;
-    result.kind = ASSERT_COMPARE_VALUE_POINTER;
-    result.pointer = value;
-    return result;
-}
-
-AssertCompareValue
-assert_compare_value_string(char *file, int32 line, char *func,
-                            char *name, char *value) {
-    AssertCompareValue result = {0};
-
-    (void)file;
-    (void)line;
-    (void)func;
-    (void)name;
-    result.kind = ASSERT_COMPARE_VALUE_STRING;
-    result.string = value;
-    return result;
-}
-
-AssertCompareValue
-assert_compare_value_bool(char *file, int32 line, char *func,
-                          char *name, bool value) {
-    AssertCompareValue result = {0};
-
-    (void)file;
-    (void)line;
-    (void)func;
-    (void)name;
-    result.kind = ASSERT_COMPARE_VALUE_BOOL;
-    result.boolean = value;
-    return result;
-}
-
-AssertCompareValue
-assert_compare_value_signed(char *file, int32 line, char *func,
-                            char *name, llong value) {
-    AssertCompareValue result = {0};
-
-    (void)file;
-    (void)line;
-    (void)func;
-    (void)name;
-    result.kind = ASSERT_COMPARE_VALUE_INTEGER;
-    result.integer = value;
-    return result;
-}
-
-AssertCompareValue
-assert_compare_value_unsigned(char *file, int32 line, char *func,
-                              char *name, ullong value) {
-    AssertCompareValue result = {0};
-
-    if (value > LLONG_MAX) {
-        if (DEBUGGING) {
-            assert_error(file, line, func,
-                         "%s = %llu is larger than LLONG_MAX\n", name, value);
-        }
-        result.kind = ASSERT_COMPARE_VALUE_INVALID;
-        return result;
-    }
-
-    result.kind = ASSERT_COMPARE_VALUE_INTEGER;
-    result.integer = (llong)value;
-    return result;
-}
-
-AssertCompareValue
-assert_compare_value_float(char *file, int32 line, char *func,
-                           char *name, float value) {
-    AssertCompareValue result = {0};
-
-    (void)file;
-    (void)line;
-    (void)func;
-    (void)name;
-    result.kind = ASSERT_COMPARE_VALUE_DOUBLE;
-    result.adouble = (double)value;
-    return result;
-}
-
-AssertCompareValue
-assert_compare_value_double(char *file, int32 line, char *func,
-                            char *name, double value) {
-    AssertCompareValue result = {0};
-
-    (void)file;
-    (void)line;
-    (void)func;
-    (void)name;
-    result.kind = ASSERT_COMPARE_VALUE_DOUBLE;
-    result.adouble = value;
-    return result;
-}
-
 static char *
 assert_compare_mode_symbol(enum AssertCompareMode mode) {
     switch (mode) {
@@ -203,84 +100,11 @@ assert_compare_mode_symbol(enum AssertCompareMode mode) {
     }
 }
 
-#define ASSERT_COMPARE_MODE_SWITCH(mode, VAR1, VAR2) \
-    switch (mode) {                                  \
-    case ASSERT_COMPARE_MODE_LESS:                   \
-        return (VAR1) < (VAR2);                      \
-    case ASSERT_COMPARE_MODE_LESS_EQUAL:             \
-        return (VAR1) <= (VAR2);                     \
-    case ASSERT_COMPARE_MODE_EQUAL:                  \
-        return (VAR1) == (VAR2);                     \
-    case ASSERT_COMPARE_MODE_NOT_EQUAL:              \
-        return (VAR1) != (VAR2);                     \
-    case ASSERT_COMPARE_MODE_GREATER:                \
-        return (VAR1) > (VAR2);                      \
-    case ASSERT_COMPARE_MODE_GREATER_EQUAL:          \
-        return (VAR1) >= (VAR2);                     \
-    default:                                         \
-        UNREACHABLE();                               \
-    }                                                \
-    UNREACHABLE()
-
-static bool
-assert_compare_const_integer(enum AssertCompareMode mode,
-                             llong var1, llong var2) {
-    ASSERT_COMPARE_MODE_SWITCH(mode, var1, var2);
-}
-
-static bool
-assert_compare_const_double(enum AssertCompareMode mode,
-                            double var1, double var2) {
-    ASSERT_COMPARE_MODE_SWITCH(mode, var1, var2);
-}
-
-static bool
-assert_compare_const_pointer(enum AssertCompareMode mode,
-                             void *var1, void *var2) {
-    uintptr pointer1 = (uintptr)var1;
-    uintptr pointer2 = (uintptr)var2;
-
-    ASSERT_COMPARE_MODE_SWITCH(mode, pointer1, pointer2);
-}
-
-static bool
-assert_compare_const_string(enum AssertCompareMode mode,
-                            char *var1, char *var2) {
-    int32 comparison;
-
-    if ((var1 == NULL) || (var2 == NULL)) {
-        return (var1 == NULL) && (var2 == NULL)
-               && (mode == ASSERT_COMPARE_MODE_EQUAL);
-    }
-
-    comparison = strcmp(var1, var2);
-    ASSERT_COMPARE_MODE_SWITCH(mode, comparison, 0);
-}
-
-static bool
-assert_compare_const_bool(enum AssertCompareMode mode, bool var1, bool var2) {
-    switch (mode) {
-    case ASSERT_COMPARE_MODE_EQUAL:
-        return var1 == var2;
-    case ASSERT_COMPARE_MODE_NOT_EQUAL:
-        return var1 != var2;
-    case ASSERT_COMPARE_MODE_LESS:
-    case ASSERT_COMPARE_MODE_LESS_EQUAL:
-    case ASSERT_COMPARE_MODE_GREATER:
-    case ASSERT_COMPARE_MODE_GREATER_EQUAL:
-        return false;
-    default:
-        UNREACHABLE();
-    }
-}
-
-#undef ASSERT_COMPARE_MODE_SWITCH
-
 static char *
 assert_compare_value_kind_name(enum AssertCompareValueKind kind) {
     switch (kind) {
-    case ASSERT_COMPARE_VALUE_INVALID:
-        return "invalid";
+    case ASSERT_COMPARE_VALUE_UNSIGNED:
+        return "unsigned integer";
     case ASSERT_COMPARE_VALUE_POINTER:
         return "pointer";
     case ASSERT_COMPARE_VALUE_STRING:
@@ -289,6 +113,7 @@ assert_compare_value_kind_name(enum AssertCompareValueKind kind) {
         return "bool";
     case ASSERT_COMPARE_VALUE_INTEGER:
         return "integer";
+    case ASSERT_COMPARE_VALUE_FLOAT:
     case ASSERT_COMPARE_VALUE_DOUBLE:
         return "floating-point";
     default:
@@ -296,122 +121,82 @@ assert_compare_value_kind_name(enum AssertCompareValueKind kind) {
     }
 }
 
-static bool
-assert_compare_const_unsupported(char *file, int32 line, char *func,
-                                 char *name1, char *name2,
-                                 AssertCompareValue var1,
-                                 AssertCompareValue var2) {
-    if (DEBUGGING) {
+bool
+assert_compare_strings(enum AssertCompareMode mode, char *var1, char *var2) {
+    int32 comparison;
+
+    if ((var1 == NULL) || (var2 == NULL)) {
+        return (var1 == NULL) && (var2 == NULL)
+               && (mode == ASSERT_COMPARE_MODE_EQUAL);
+    }
+    if (mode == ASSERT_COMPARE_MODE_EQUAL) {
+        return strequal(var1, var2);
+    }
+    if (mode == ASSERT_COMPARE_MODE_NOT_EQUAL) {
+        return !strequal(var1, var2);
+    }
+    comparison = strcmp(var1, var2);
+    switch (mode) {
+    case ASSERT_COMPARE_MODE_LESS:
+        return comparison < 0;
+    case ASSERT_COMPARE_MODE_LESS_EQUAL:
+        return comparison <= 0;
+    case ASSERT_COMPARE_MODE_GREATER:
+        return comparison > 0;
+    case ASSERT_COMPARE_MODE_GREATER_EQUAL:
+        return comparison >= 0;
+    case ASSERT_COMPARE_MODE_EQUAL:
+    case ASSERT_COMPARE_MODE_NOT_EQUAL:
+    default:
+        UNREACHABLE();
+    }
+    UNREACHABLE();
+}
+
+void
+assert_compare_failure(char *file, int32 line, char *func,
+                       enum AssertCompareMode mode,
+                       char *name1, char *name2,
+                       AssertCompareValue var1, AssertCompareValue var2) {
+    char *symbol = assert_compare_mode_symbol(mode);
+
+    if ((var1.kind == ASSERT_COMPARE_VALUE_INTEGER)
+        && (var2.kind == ASSERT_COMPARE_VALUE_INTEGER)) {
+        assert_error(file, line, func,
+                     "%s = %lld %s %lld = %s\n",
+                     name1, var1.integer, symbol, var2.integer, name2);
+    } else if (ASSERT_COMPARE_IS_NUMBER(var1.kind)
+               && ASSERT_COMPARE_IS_NUMBER(var2.kind)) {
+        assert_error(file, line, func,
+                     "%s = %f %s %f = %s\n",
+                     name1, ASSERT_COMPARE_AS_DOUBLE(var1, var1.kind),
+                     symbol,
+                     ASSERT_COMPARE_AS_DOUBLE(var2, var2.kind), name2);
+    } else if ((var1.kind == ASSERT_COMPARE_VALUE_STRING)
+               && (var2.kind == ASSERT_COMPARE_VALUE_STRING)
+               && var1.string && var2.string) {
+        assert_error(file, line, func,
+                     "%s = %s %s %s = %s\n",
+                     name1, var1.string, symbol, var2.string, name2);
+    } else if (ASSERT_COMPARE_IS_POINTER(var1.kind)
+               && ASSERT_COMPARE_IS_POINTER(var2.kind)) {
+        assert_error(file, line, func,
+                     "%s = %p %s %p = %s\n",
+                     name1, ASSERT_COMPARE_AS_POINTER(var1, var1.kind),
+                     symbol,
+                     ASSERT_COMPARE_AS_POINTER(var2, var2.kind), name2);
+    } else if ((var1.kind == ASSERT_COMPARE_VALUE_BOOL)
+               && (var2.kind == ASSERT_COMPARE_VALUE_BOOL)) {
+        assert_error(file, line, func,
+                     "%s = %d %s %d = %s\n",
+                     name1, var1.boolean, symbol, var2.boolean, name2);
+    } else {
         assert_error(file, line, func,
                      "Unsupported comparison: %s (%s), %s (%s)\n",
                      name1, assert_compare_value_kind_name(var1.kind),
                      name2, assert_compare_value_kind_name(var2.kind));
     }
-    return false;
-}
-
-bool
-assert_compare_const(char *file, int32 line, char *func,
-                     enum AssertCompareMode mode,
-                     char *name1, char *name2,
-                     AssertCompareValue var1, AssertCompareValue var2) {
-    bool result;
-
-    if ((var1.kind == ASSERT_COMPARE_VALUE_INVALID)
-        || (var2.kind == ASSERT_COMPARE_VALUE_INVALID)) {
-        return false;
-    } else if ((var1.kind == ASSERT_COMPARE_VALUE_INTEGER)
-        && (var2.kind == ASSERT_COMPARE_VALUE_INTEGER)) {
-        result = assert_compare_const_integer(mode, var1.integer, var2.integer);
-        if (!result && DEBUGGING) {
-            assert_error(file, line, func,
-                         "%s = %lld %s %lld = %s\n",
-                         name1, var1.integer,
-                         assert_compare_mode_symbol(mode),
-                         var2.integer, name2);
-        }
-    } else if (((var1.kind == ASSERT_COMPARE_VALUE_INTEGER)
-                || (var1.kind == ASSERT_COMPARE_VALUE_DOUBLE))
-               && ((var2.kind == ASSERT_COMPARE_VALUE_INTEGER)
-                   || (var2.kind == ASSERT_COMPARE_VALUE_DOUBLE))) {
-        double value1;
-        double value2;
-
-        if (var1.kind == ASSERT_COMPARE_VALUE_INTEGER) {
-            value1 = (double)var1.integer;
-        } else {
-            value1 = var1.adouble;
-        }
-        if (var2.kind == ASSERT_COMPARE_VALUE_INTEGER) {
-            value2 = (double)var2.integer;
-        } else {
-            value2 = var2.adouble;
-        }
-        result = assert_compare_const_double(mode, value1, value2);
-        if (!result && DEBUGGING) {
-            assert_error(file, line, func,
-                         "%s = %f %s %f = %s\n",
-                         name1, value1, assert_compare_mode_symbol(mode),
-                         value2, name2);
-        }
-    } else if ((var1.kind == ASSERT_COMPARE_VALUE_STRING)
-               && (var2.kind == ASSERT_COMPARE_VALUE_STRING)) {
-        result = assert_compare_const_string(mode, var1.string, var2.string);
-        if (!result && DEBUGGING) {
-            if ((var1.string == NULL) || (var2.string == NULL)) {
-                assert_error(file, line, func,
-                             "%s = %p %s %p = %s\n",
-                             name1, (void *)var1.string,
-                             assert_compare_mode_symbol(mode),
-                             (void *)var2.string, name2);
-            } else {
-                assert_error(file, line, func,
-                             "%s = %s %s %s = %s\n",
-                             name1, var1.string,
-                             assert_compare_mode_symbol(mode),
-                             var2.string, name2);
-            }
-        }
-    } else if (((var1.kind == ASSERT_COMPARE_VALUE_POINTER)
-                || (var1.kind == ASSERT_COMPARE_VALUE_STRING))
-               && ((var2.kind == ASSERT_COMPARE_VALUE_POINTER)
-                   || (var2.kind == ASSERT_COMPARE_VALUE_STRING))) {
-        void *pointer1;
-        void *pointer2;
-
-        if (var1.kind == ASSERT_COMPARE_VALUE_STRING) {
-            pointer1 = var1.string;
-        } else {
-            pointer1 = var1.pointer;
-        }
-        if (var2.kind == ASSERT_COMPARE_VALUE_STRING) {
-            pointer2 = var2.string;
-        } else {
-            pointer2 = var2.pointer;
-        }
-        result = assert_compare_const_pointer(mode, pointer1, pointer2);
-        if (!result && DEBUGGING) {
-            assert_error(file, line, func,
-                         "%s = %p %s %p = %s\n",
-                         name1, pointer1, assert_compare_mode_symbol(mode),
-                         pointer2, name2);
-        }
-    } else if ((var1.kind == ASSERT_COMPARE_VALUE_BOOL)
-               && (var2.kind == ASSERT_COMPARE_VALUE_BOOL)) {
-        result = assert_compare_const_bool(mode, var1.boolean, var2.boolean);
-        if (!result && DEBUGGING) {
-            assert_error(file, line, func,
-                         "%s = %d %s %d = %s\n",
-                         name1, var1.boolean,
-                         assert_compare_mode_symbol(mode),
-                         var2.boolean, name2);
-        }
-    } else {
-        return assert_compare_const_unsupported(file, line, func, name1, name2,
-                                                var1, var2);
-    }
-
-    return result;
+    return;
 }
 
 bool
@@ -1350,6 +1135,14 @@ assert_functions_sink(void) {
 #define CBASE_IMPLEMENT
 #include "cbase.h"
 
+static int32
+assert_test_next(int32 *value) {
+    int32 previous = *value;
+
+    *value += 1;
+    return previous;
+}
+
 int32
 main(void) {
     ASSERT(true);
@@ -1367,6 +1160,31 @@ main(void) {
     {
         void *pointer = NULL;
         ASSERT_EQ(pointer, NULL);
+    }
+
+    {
+        int32 left = 1;
+        int32 right = 1;
+        uint unsigned_zero = 0;
+        schar negative = -1;
+        char *first = "alpha";
+        char *second = "beta";
+        char *missing = NULL;
+        void *address = first;
+
+        ASSERT_EQ(assert_test_next(&left), assert_test_next(&right));
+        ASSERT_EQ(left, 2);
+        ASSERT_EQ(right, 2);
+        ASSERT_GT(assert_test_next(&left), 0);
+        ASSERT_EQ(left, 3);
+        ASSERT_LT(negative, 0u);
+        ASSERT_GT(unsigned_zero, -1);
+        ASSERT_LT(first, "beta");
+        ASSERT_GT(second, "alpha");
+        ASSERT_EQ(first, address);
+        ASSERT_EQ(missing, (char *)NULL);
+        ASSERT_EQ(0.5f, 0.5);
+        ASSERT_NE(0.5f, 0.75);
     }
 
     ASSERT_GT(1, 0);
@@ -1606,6 +1424,7 @@ main(void) {
         char *string_null = NULL;
         char *string_some = "some";
         ullong too_large = ULLONG_MAX;
+        bool yes = true;
 
         fprintf(stderr, "\nThe following assertions are supposed to fail\n");
 
@@ -1626,6 +1445,12 @@ main(void) {
         ASSERT_TRAPS(ASSERT_EQ(0, too_large));
         ASSERT_TRAPS(ASSERT_NE(too_large, 0));
         ASSERT_TRAPS(ASSERT_NE(0, too_large));
+        ASSERT_TRAPS(ASSERT_GT(too_large, 0));
+        ASSERT_TRAPS(ASSERT_LT(0, ULLONG_MAX));
+        ASSERT_TRAPS(ASSERT_NE(string_null, string_some));
+        ASSERT_TRAPS(ASSERT_NE(string_null, (char *)NULL));
+        ASSERT_TRAPS(ASSERT_GT(yes, (bool)false));
+        ASSERT_TRAPS(ASSERT_EQ(a, yes));
         ASSERT_TRAPS(ASSERT_NOT_CLOSE(close_a, close_b));
         ASSERT_TRAPS(ASSERT_NOT_CLOSE(close_a, close_b, 0.01));
         ASSERT_TRAPS(ASSERT_CONTAINS("alpha beta gamma\n", 17, "delta\n"));
